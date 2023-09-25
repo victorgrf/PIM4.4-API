@@ -6,7 +6,6 @@ namespace API.Data.Models
     [Table("secretario")]
     public class Secretario : Pessoa
     {
-        [Key]
-        public new int id { get; set; }
+        [Key] public new int id { get; set; }
     }
 }

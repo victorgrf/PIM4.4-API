@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using API.Data.Services;
 using API.Data.ViewModels;
+using API.Data.Errors;
 
 namespace API.Data.Controllers
 {
@@ -41,10 +42,10 @@ namespace API.Data.Controllers
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == professor.rg).FirstOrDefault();
             if (test_cpf != null || test_rg != null)
             {
-                var str = "Já existe um cadastro com os seguintes itens: ";
-                if (test_cpf != null) str = str + "cpf ";
-                if (test_rg != null) str = str + "rg ";
-                return Conflict(str);
+                var errorObj = new DuplicatedFieldError();
+                if (test_cpf != null) errorObj.AddField("cpf");
+                if (test_rg != null) errorObj.AddField("rg");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             this.service.AddProfessor(professor);
@@ -58,10 +59,10 @@ namespace API.Data.Controllers
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == professor.rg).Where(e => e.id != id).FirstOrDefault();
             if ((test_cpf != null && professor.cpf == test_cpf.cpf) || (test_rg != null && professor.rg == test_rg.rg))
             {
-                var str = "Já existe outro cadastro com os seguintes itens: ";
-                if (test_cpf != null) str = str + "cpf ";
-                if (test_rg != null) str = str + "rg ";
-                return Conflict(str);
+                var errorObj = new DuplicatedFieldError();
+                if (test_cpf != null) errorObj.AddField("cpf");
+                if (test_rg != null) errorObj.AddField("rg");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             var table = this.dbContext.Professores.Where(e => e.id == id).FirstOrDefault();

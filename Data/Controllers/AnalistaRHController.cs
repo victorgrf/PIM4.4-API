@@ -4,6 +4,7 @@ using API.Data.Services;
 using API.Data.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using API.Data.Errors;
 
 namespace API.Data.Controllers
 {
@@ -43,10 +44,10 @@ namespace API.Data.Controllers
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).FirstOrDefault();
             if (test_cpf != null || test_rg != null)
             {
-                var str = "Já existe um cadastro com os seguintes itens: ";
-                if (test_cpf != null) str = str + "cpf ";
-                if (test_rg != null) str = str + "rg ";
-                return Conflict(str);
+                var errorObj = new DuplicatedFieldError();
+                if (test_cpf != null) errorObj.AddField("cpf");
+                if (test_rg != null) errorObj.AddField("rg");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             this.service.AddAnalistaRH(analistaRH);
@@ -60,10 +61,10 @@ namespace API.Data.Controllers
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).Where(e => e.id != id).FirstOrDefault();
             if ((test_cpf != null && analistaRH.cpf == test_cpf.cpf) || (test_rg != null && analistaRH.rg == test_rg.rg))
             {
-                var str = "Já existe outro cadastro com os seguintes itens: ";
-                if (test_cpf != null) str = str + "cpf ";
-                if (test_rg != null) str = str + "rg ";
-                return Conflict(str);
+                var errorObj = new DuplicatedFieldError();
+                if (test_cpf != null) errorObj.AddField("cpf");
+                if (test_rg != null) errorObj.AddField("rg");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             var table = this.dbContext.AnalistasRH.Where(e => e.id == id).FirstOrDefault();

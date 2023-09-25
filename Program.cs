@@ -1,6 +1,7 @@
 using API.Data.Services;
 using API.Data.ViewModels;
 using API.DataBase;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    x.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
 });
 
 // Add Services
@@ -19,6 +21,8 @@ builder.Services.AddTransient<AnalistaRHService>();
 builder.Services.AddTransient<SecretarioService>();
 builder.Services.AddTransient<ProfessorService>();
 builder.Services.AddTransient<AlunoService>();
+builder.Services.AddTransient<DisciplinaService>();
+builder.Services.AddTransient<CursoService>();
 
 // Connect to MySQL DataBase.
 var connectionStr = builder.Configuration.GetConnectionString("ConnectionMySQL");

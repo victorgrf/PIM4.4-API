@@ -6,7 +6,6 @@ namespace API.Data.Models
     [Table("professor")]
     public class Professor : Pessoa
     {
-        [Key]
-        public new int id { get; set; }
+        [Key] public new int id { get; set; }
     }
 }

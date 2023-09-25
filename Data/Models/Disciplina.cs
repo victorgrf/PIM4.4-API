@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Data.Models
 {
-    [Table("analistarh")]
-    public class AnalistaRH : Pessoa
+    [Table("disciplina")]
+    public class Disciplina
     {
-        [Key] public new int id { get; set; }
+        [Key] public int id { get; set; }
+        public string nome { get; set; }
     }
 }
