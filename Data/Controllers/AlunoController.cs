@@ -22,7 +22,7 @@ namespace API.Data.Controllers
         [HttpGet]
         public ActionResult<List<Secretario>> HttpGetAll(string? nome)
         {
-            var response = this.service.GetAllSecretarios(nome);
+            var response = this.service.ServiceGetAll(nome);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -30,7 +30,7 @@ namespace API.Data.Controllers
         [HttpGet("{id}")]
         public ActionResult<Secretario> HttpGet(int id)
         {
-            var response = this.service.GetSecretario(id);
+            var response = this.service.ServiceGet(id);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -48,7 +48,7 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            this.service.AddSecretario(secretario);
+            this.service.ServicePost(secretario);
             return Ok();
         }
 
@@ -67,7 +67,7 @@ namespace API.Data.Controllers
 
             var table = this.dbContext.Secretarios.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.UpdateSecretario(id, secretario);
+            this.service.ServicePut(id, secretario);
             return Ok();
         }
 
@@ -76,7 +76,7 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.Secretarios.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.RemoveSecretario(table);
+            this.service.ServiceDelete(table);
             return Ok();
         }
     }

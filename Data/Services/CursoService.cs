@@ -12,7 +12,7 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.Curso> GetAllCursos(string? nome)
+        public List<ViewModels.Curso> ServiceGetAll(string? nome)
         {
             var response = this.context.Cursos
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
@@ -26,7 +26,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public ViewModels.Curso GetCurso(int id)
+        public ViewModels.Curso ServiceGet(int id)
         {
             var response = this.context.Cursos
                 .Where(n => n.id == id)
@@ -41,7 +41,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public void AddCurso(Curso_Input curso)
+        public void ServicePost(Curso_Input curso)
         {
             Curso_Input Curso = curso;
             var obj = new Models.Curso()
@@ -55,7 +55,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void Updatecurso(int id, Curso_Input curso)
+        public void ServicePut(int id, Curso_Input curso)
         {
             var obj = this.context.Cursos.FirstOrDefault(n => n.id == id);
 
@@ -66,7 +66,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void Removecurso(Models.Curso curso)
+        public void ServiceDelete(Models.Curso curso)
         {
             this.context.Remove(curso);
             this.context.SaveChanges();

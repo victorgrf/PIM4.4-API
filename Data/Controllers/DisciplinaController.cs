@@ -22,7 +22,7 @@ namespace API.Data.Controllers
         [HttpGet]
         public ActionResult<List<Disciplina>> HttpGetAll(string? nome)
         {
-            var response = this.service.GetAllDisciplinas(nome);
+            var response = this.service.ServiceGetAll(nome);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -30,7 +30,7 @@ namespace API.Data.Controllers
         [HttpGet("{id}")]
         public ActionResult<Disciplina> HttpGet(int id)
         {
-            var response = this.service.GetDisciplina(id);
+            var response = this.service.ServiceGet(id);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -46,7 +46,7 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            this.service.AddDisciplina(disciplina);
+            this.service.ServicePost(disciplina);
             return Ok();
         }
 
@@ -63,7 +63,7 @@ namespace API.Data.Controllers
 
             var table = this.dbContext.Disciplinas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.UpdateDisciplina(id, disciplina);
+            this.service.ServicePut(id, disciplina);
             return Ok();
         }
 
@@ -72,7 +72,7 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.Disciplinas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.RemoveDisciplina(table);
+            this.service.ServiceDelete(table);
             return Ok();
         }
     }

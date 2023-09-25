@@ -24,7 +24,7 @@ namespace API.Data.Controllers
         [HttpGet]
         public ActionResult<List<AnalistaRH>> HttpGetAll(string? nome)
         {
-            var response = this.service.GetAllAnalistasRH(nome);
+            var response = this.service.ServiceGetAll(nome);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -32,7 +32,7 @@ namespace API.Data.Controllers
         [HttpGet("{id}")]
         public ActionResult<AnalistaRH> HttpGet(int id)
         {
-            var response = this.service.GetAnalistaRH(id);
+            var response = this.service.ServiceGet(id);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -50,7 +50,7 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            this.service.AddAnalistaRH(analistaRH);
+            this.service.ServicePost(analistaRH);
             return Ok();
         }
 
@@ -69,7 +69,7 @@ namespace API.Data.Controllers
 
             var table = this.dbContext.AnalistasRH.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.UpdateAnalistaRH(id, analistaRH);
+            this.service.ServicePut(id, analistaRH);
             return Ok();
         }
 
@@ -78,7 +78,7 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.AnalistasRH.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.RemoveAnalistaRH(table);
+            this.service.ServiceDelete(table);
             return Ok();
         }
     }

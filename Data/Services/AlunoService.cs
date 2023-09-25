@@ -12,7 +12,7 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.Secretario> GetAllSecretarios(string? nome)
+        public List<ViewModels.Secretario> ServiceGetAll(string? nome)
         {
             var response = this.context.Secretarios
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
@@ -29,7 +29,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public ViewModels.Secretario GetSecretario(int id)
+        public ViewModels.Secretario ServiceGet(int id)
         {
             var response = this.context.Secretarios
                 .Where(n => n.id == id)
@@ -47,7 +47,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public void AddSecretario(Secretario_Input secretario)
+        public void ServicePost(Secretario_Input secretario)
         {
             var obj = new Models.Secretario()
             {
@@ -63,7 +63,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void UpdateSecretario(int id, Secretario_Input secretario)
+        public void ServicePut(int id, Secretario_Input secretario)
         {
             var obj = this.context.Secretarios.FirstOrDefault(n => n.id == id);
 
@@ -77,7 +77,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void RemoveSecretario(Models.Secretario secretario)
+        public void ServiceDelete(Models.Secretario secretario)
         {
             this.context.Remove(secretario);
             this.context.SaveChanges();

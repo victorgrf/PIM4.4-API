@@ -12,7 +12,7 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.AnalistaRH> GetAllAnalistasRH(string? nome)
+        public List<ViewModels.AnalistaRH> ServiceGetAll(string? nome)
         {
             var response = this.context.AnalistasRH
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
@@ -29,7 +29,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public ViewModels.AnalistaRH GetAnalistaRH(int id)
+        public ViewModels.AnalistaRH ServiceGet(int id)
         {
             var response = this.context.AnalistasRH
                 .Where(n => n.id == id)
@@ -47,7 +47,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public void AddAnalistaRH(AnalistaRH_Input analistaRH)
+        public void ServicePost(AnalistaRH_Input analistaRH)
         {
             var obj = new Models.AnalistaRH()
             {
@@ -63,7 +63,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void UpdateAnalistaRH(int id, AnalistaRH_Input analistaRH)
+        public void ServicePut(int id, AnalistaRH_Input analistaRH)
         {
             var obj = this.context.AnalistasRH.FirstOrDefault(n => n.id == id);
 
@@ -77,7 +77,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void RemoveAnalistaRH(Models.AnalistaRH analistaRH)
+        public void ServiceDelete(Models.AnalistaRH analistaRH)
         {
             this.context.Remove(analistaRH);
             this.context.SaveChanges();

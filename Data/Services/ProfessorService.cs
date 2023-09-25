@@ -12,7 +12,7 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.Professor> GetAllProfessores(string? nome)
+        public List<ViewModels.Professor> ServiceGetAll(string? nome)
         {
             var response = this.context.Professores
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
@@ -29,7 +29,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public ViewModels.Professor GetProfessor(int id)
+        public ViewModels.Professor ServiceGet(int id)
         {
             var response = this.context.Professores
                 .Where(n => n.id == id)
@@ -47,7 +47,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public void AddProfessor(Professor_Input professor)
+        public void ServicePost(Professor_Input professor)
         {
             var obj = new Models.Professor()
             {
@@ -63,7 +63,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void UpdateProfessor(int id, Professor_Input professor)
+        public void ServicePut(int id, Professor_Input professor)
         {
             var obj = this.context.Professores.FirstOrDefault(n => n.id == id);
 
@@ -77,7 +77,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void RemoveProfessor(Models.Professor professor)
+        public void ServiceDelete(Models.Professor professor)
         {
             this.context.Remove(professor);
             this.context.SaveChanges();

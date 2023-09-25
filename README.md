@@ -10,6 +10,9 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * Microsoft.EntityFrameworkCore.Tools
 * Pomelo.EntityFrameworkCore.MySql
 * Newtonsoft.Json
+* Microsoft.AspNetCore.Authentication.JwtBearer (versão 6.0.*)
+
+> Change Jwt secret key on appsettings.json!
 
 ## Rotas
 * GET api/analistarh

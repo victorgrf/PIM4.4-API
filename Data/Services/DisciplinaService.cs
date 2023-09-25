@@ -12,7 +12,7 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.Disciplina> GetAllDisciplinas(string? nome)
+        public List<ViewModels.Disciplina> ServiceGetAll(string? nome)
         {
             var response = this.context.Disciplinas
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
@@ -24,7 +24,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public ViewModels.Disciplina GetDisciplina(int id)
+        public ViewModels.Disciplina ServiceGet(int id)
         {
             var response = this.context.Disciplinas
                 .Where(n => n.id == id)
@@ -37,7 +37,7 @@ namespace API.Data.Services
             return response;
         }
 
-        public void AddDisciplina(Disciplina_Input disciplina)
+        public void ServicePost(Disciplina_Input disciplina)
         {
             var obj = new Models.Disciplina()
             {
@@ -48,7 +48,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void UpdateDisciplina(int id, Disciplina_Input disciplina)
+        public void ServicePut(int id, Disciplina_Input disciplina)
         {
             var obj = this.context.Disciplinas.FirstOrDefault(n => n.id == id);
 
@@ -57,7 +57,7 @@ namespace API.Data.Services
             this.context.SaveChanges();
         }
 
-        public void RemoveDisciplina(Models.Disciplina disciplina)
+        public void ServiceDelete(Models.Disciplina disciplina)
         {
             this.context.Remove(disciplina);
             this.context.SaveChanges();
