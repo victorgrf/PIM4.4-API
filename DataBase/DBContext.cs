@@ -12,5 +12,7 @@ namespace API.DataBase
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<AnalistaRH> AnalistasRH { get; set; }
         public DbSet<Secretario> Secretarios { get; set; }
+        public DbSet<Professor> Professores { get; set; }
+        public DbSet<Aluno> Alunos { get; set; }
     }
 }

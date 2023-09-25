@@ -2,6 +2,8 @@ using API.Data.Services;
 using API.Data.ViewModels;
 using API.DataBase;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 // Add Services
 builder.Services.AddTransient<AnalistaRHService>();
 builder.Services.AddTransient<SecretarioService>();
+builder.Services.AddTransient<ProfessorService>();
+builder.Services.AddTransient<AlunoService>();
 
 // Connect to MySQL DataBase.
 var connectionStr = builder.Configuration.GetConnectionString("ConnectionMySQL");
@@ -28,6 +32,8 @@ builder.Services.AddDbContext<DBContext>(option => option.UseMySql(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Remove _Input ViewModels from Swagger documentation
 
 var app = builder.Build();
 
