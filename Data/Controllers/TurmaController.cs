@@ -57,6 +57,9 @@ namespace API.Data.Controllers
                 }
             }
 
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == turma.idCurso);
+            if (curso == null) return BadRequest("idCurso inválido");
+
             this.service.ServicePost(turma);
             return Ok();
         }
@@ -75,6 +78,10 @@ namespace API.Data.Controllers
 
             var table = this.dbContext.Turmas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
+
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == turma.idCurso);
+            if (curso == null) return BadRequest("idCurso inválido");
+
             this.service.ServicePut(id, turma);
             return Ok();
         }

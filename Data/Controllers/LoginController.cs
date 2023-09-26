@@ -16,10 +16,10 @@ namespace API.Data.Controllers
     public class LoginController : ControllerBase
     {
         private readonly DBContext dbContext;
-        private readonly SecretarioService service;
+        private readonly AnalistaRHService service;
         private readonly AuthenticateService authenticate;
 
-        public LoginController(DBContext context, SecretarioService service, IConfiguration configuration)
+        public LoginController(DBContext context, AnalistaRHService service, IConfiguration configuration)
         {
             this.dbContext = context;
             this.service = service;
@@ -76,6 +76,28 @@ namespace API.Data.Controllers
                 token = newToken,
                 valido = valido
             });
+        }
+
+        [HttpPost("startup")]
+        [AllowAnonymous]
+        public ActionResult<dynamic> Startup(ViewModels.AnalistaRH_Input analistaRH)
+        {
+            var test = this.dbContext.Pessoas.FirstOrDefault();
+            if (test != null)
+            {
+                return BadRequest("O starup já foi feito anteriormente.");
+            }
+
+            this.service.ServicePost(analistaRH);
+            return Ok();
+        }
+
+        [HttpPut("mudarsenha")]
+        [Authorize]
+        public ActionResult<dynamic> MudarSenha()
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Unauthorized();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using API.DataBase;
 using API.Data.ViewModels;
 using API.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Services
 {
@@ -20,7 +21,15 @@ namespace API.Data.Services
                 {
                     id = turma.id,
                     nome = turma.nome,
-                    idCurso = turma.idCurso
+                    curso = this.context.Cursos
+                        .Where(n => n.id == turma.idCurso)
+                        .Select(curso => new ViewModels.Curso()
+                        {
+                            id = curso.id,
+                            nome = curso.nome,
+                            cargaHoraria = curso.cargaHoraria,
+                            aulasTotais = curso.aulasTotais
+                        }).FirstOrDefault()
                 }).ToList();
             return response;
         }
@@ -33,7 +42,15 @@ namespace API.Data.Services
                 {
                     id = turma.id,
                     nome = turma.nome,
-                    idCurso = turma.idCurso
+                    curso = this.context.Cursos
+                        .Where(n => n.id == turma.idCurso)
+                        .Select(curso => new ViewModels.Curso()
+                        {
+                            id = curso.id,
+                            nome = curso.nome,
+                            cargaHoraria = curso.cargaHoraria,
+                            aulasTotais = curso.aulasTotais
+                        }).FirstOrDefault()
                 }).FirstOrDefault();
 
             return response;

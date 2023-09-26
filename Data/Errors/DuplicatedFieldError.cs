@@ -10,7 +10,7 @@ namespace API.Data.Errors
         public DuplicatedFieldError()
         {
             this.title = "Um ou mais dados enviados conflitem com os de outro cadastro.";
-            this.status = 409;
+            this.status = GetStatusCode();
             this.fields = new List<string>();
         }
 

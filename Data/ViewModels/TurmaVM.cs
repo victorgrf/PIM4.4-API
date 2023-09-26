@@ -18,6 +18,6 @@ namespace API.Data.ViewModels
     {
         public int id { get; set; }
         public string nome { get; set; }
-        public int idCurso { get; set; }
+        public ViewModels.Curso? curso { get; set; }
     }
 }

@@ -1,26 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using API.DataBase;
+﻿using API.DataBase;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.OpenApi.Validations;
 using API.Data.Models;
-using System.Security.Cryptography;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace API.Data.Identity
@@ -72,7 +55,7 @@ namespace API.Data.Identity
                 SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
                 Subject = claimsIdentity,
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Expires = DateTime.UtcNow.AddHours(3),
                 IssuedAt = DateTime.UtcNow,
                 TokenType = "at+jwt"
             });
@@ -93,11 +76,10 @@ namespace API.Data.Identity
                 SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
                 Subject = claimsIdentity,
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(2),
+                Expires = DateTime.UtcNow.AddDays(7),
                 TokenType = "rt+jwt"
             });
 
-            Console.WriteLine("SECURITY KEY: " + refreshToken.SecurityKey);
             return handler.WriteToken(refreshToken);
         }
 
