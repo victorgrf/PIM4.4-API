@@ -6,6 +6,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Validations;
 using API.Data.Models;
+using System.Security.Cryptography;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace API.Data.Identity
 {
@@ -13,6 +29,7 @@ namespace API.Data.Identity
     {
         private readonly DBContext context;
         private readonly IConfiguration configuration;
+        private SecurityKey securityKey { get; set; }
 
         public AuthenticateService(DBContext context, IConfiguration configuration)
         {
@@ -31,27 +48,80 @@ namespace API.Data.Identity
             return true;
         }
 
-        public string GerarToken(int id, string email, string cargo)
+        private ClaimsIdentity GerarClaims(int id, string? email, string? cargo)
         {
-            var claimsL = new List<Claim>();
-            claimsL.Add(new Claim("id", id.ToString()));
-            claimsL.Add(new Claim("email", email));
-            claimsL.Add(new Claim("role", cargo));
-            claimsL.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-            var chaveSeguranca = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:secretKey"]));
-            var credencial = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256);
-            var expiracao = DateTime.UtcNow.AddMinutes(10);
+            var claimsIdentity = new ClaimsIdentity();
+            if (email != null) claimsIdentity.AddClaim(new Claim("email", email));
+            if (cargo != null) claimsIdentity.AddClaim(new Claim("role", cargo));
+            claimsIdentity.AddClaim(new Claim("id", id.ToString()));
+            claimsIdentity.AddClaim(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: this.configuration["Jwt:issuer"],
-                audience: this.configuration["Jwt:audience"],
-                claims: claimsL,
-                expires: expiracao,
-                signingCredentials: credencial
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return claimsIdentity;
         }
+
+        public string GerarToken(Pessoa pessoa)
+        {
+            var chaveSeguranca = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:secretKey"]));
+            var claimsIdentity = this.GerarClaims(pessoa.id, pessoa.email, pessoa.cargo);
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = this.configuration["Jwt:issuer"],
+                Audience = this.configuration["Jwt:audience"],
+                SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
+                Subject = claimsIdentity,
+                NotBefore = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddMinutes(60),
+                IssuedAt = DateTime.UtcNow,
+                TokenType = "at+jwt"
+            });
+
+            return handler.WriteToken(token);
+        }
+
+        public string GerarRefreshToken(Pessoa pessoa)
+        {
+            var chaveSeguranca = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:secretKey"]));
+            var claimsIdentity = this.GerarClaims(pessoa.id, null, null);
+
+            var handler = new JwtSecurityTokenHandler();
+            var refreshToken = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = this.configuration["Jwt:issuer"],
+                Audience = this.configuration["Jwt:audience"],
+                SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
+                Subject = claimsIdentity,
+                NotBefore = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddMinutes(2),
+                TokenType = "rt+jwt"
+            });
+
+            Console.WriteLine("SECURITY KEY: " + refreshToken.SecurityKey);
+            return handler.WriteToken(refreshToken);
+        }
+
+        public bool ValidarRefreshToken(string refreshToken, int id)
+        {
+            var chaveSeguranca = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:secretKey"]));
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                handler.ValidateToken(refreshToken, new TokenValidationParameters
+                {
+                    ValidIssuer = this.configuration["Jwt:issuer"],
+                    ValidAudience = this.configuration["Jwt:audience"],
+                    IssuerSigningKey = chaveSeguranca,
+                }, out SecurityToken tokenValidado);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
 
         public Pessoa? GetPessoa(int id)
         {

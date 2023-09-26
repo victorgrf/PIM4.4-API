@@ -6,6 +6,8 @@ using API.Data.Errors;
 using API.Data.Identity;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using API.Data.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Data.Controllers
 {
@@ -26,21 +28,53 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<dynamic> HttpGetAll(Login login)
+        public ActionResult<dynamic> Login(Login login)
         {
-            if (this.authenticate.AutenticarPessoa(login.id, login.senha) == false)
+            var pessoa = this.authenticate.GetPessoa(login.id);
+            if (pessoa == null)
             {
-                return BadRequest("id e/ou senha incorreto(s).");
+                return BadRequest("id incorreto");
             }
 
-            var pessoa = this.authenticate.GetPessoa(login.id);
-            var token = this.authenticate.GerarToken(pessoa.id, pessoa.email, pessoa.cargo);
+            if (this.authenticate.AutenticarPessoa(login.id, login.senha) == false)
+            {
+                return BadRequest("senha incorreta.");
+            }
+
+            var token = this.authenticate.GerarToken(pessoa);
+            var refreshToken = this.authenticate.GerarRefreshToken(pessoa);
+
             return Ok(new 
             {
                 id = pessoa.id,
                 email = pessoa.email,
                 cargo = pessoa.cargo,
-                token = token
+                token = token,
+                refreshToken = refreshToken
+            });
+        }
+
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Refresh(Refresh refresh)
+        {
+            var pessoa = this.authenticate.GetPessoa(refresh.id);
+            var valido = this.authenticate.ValidarRefreshToken(refresh.refreshToken, refresh.id);
+
+            if (!valido)
+            {
+                BadRequest("Refresh token inválido ou expirado. Tente logar novamente \"api/login\".");
+            }
+
+            var newToken = this.authenticate.GerarToken(pessoa);
+
+            return Ok(new
+            {
+                id = pessoa.id,
+                email = pessoa.email,
+                cargo = pessoa.cargo,
+                token = newToken,
+                valido = valido
             });
         }
     }
