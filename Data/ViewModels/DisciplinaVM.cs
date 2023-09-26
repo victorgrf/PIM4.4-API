@@ -4,7 +4,9 @@ namespace API.Data.ViewModels
 {
     public class Disciplina_Input
     {
-        [Required] [MaxLength(255)] public string nome { get; set; }
+        [Required] 
+        [MaxLength(255)] 
+        public string nome { get; set; }
     }
 
     public class Disciplina

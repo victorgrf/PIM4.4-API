@@ -1,85 +1,87 @@
 ﻿using API.DataBase;
 using API.Data.ViewModels;
 using API.Data.Models;
+using API.Data.Identity;
 
 namespace API.Data.Services
 {
-    public class AlunoService
+    public class SecretarioService
     {
         private readonly DBContext context;
-        public AlunoService(DBContext context)
+        public SecretarioService(DBContext context)
         {
             this.context = context;
         }
 
-        public List<ViewModels.Aluno> GetAllAlunos(string? nome)
+        public List<ViewModels.Secretario> ServiceGetAll(string? nome)
         {
-            var response = this.context.Alunos
+            var response = this.context.Secretarios
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
-                .Select(aluno => new ViewModels.Aluno()
+                .Select(secretario => new ViewModels.Secretario()
                 {
-                    id = aluno.id,
-                    senha = aluno.senha,
-                    nome = aluno.nome,
-                    cpf = aluno.cpf,
-                    rg = aluno.rg,
-                    telefone = aluno.telefone,
-                    email = aluno.email
+                    id = secretario.id,
+                    nome = secretario.nome,
+                    cpf = secretario.cpf,
+                    rg = secretario.rg,
+                    telefone = secretario.telefone,
+                    email = secretario.email,
+                    cargo = secretario.cargo
                 }).ToList();
             return response;
         }
 
-        public ViewModels.Aluno GetAluno(int id)
+        public ViewModels.Secretario ServiceGet(int id)
         {
-            var response = this.context.Alunos
+            var response = this.context.Secretarios
                 .Where(n => n.id == id)
-                .Select(aluno => new ViewModels.Aluno()
+                .Select(secretario => new ViewModels.Secretario()
                 {
-                    id = aluno.id,
-                    senha = aluno.senha,
-                    nome = aluno.nome,
-                    cpf = aluno.cpf,
-                    rg = aluno.rg,
-                    telefone = aluno.telefone,
-                    email = aluno.email
+                    id = secretario.id,
+                    nome = secretario.nome,
+                    cpf = secretario.cpf,
+                    rg = secretario.rg,
+                    telefone = secretario.telefone,
+                    email = secretario.email,
+                    cargo = secretario.cargo
                 }).FirstOrDefault();
 
             return response;
         }
 
-        public void AddAluno(Aluno_Input aluno)
+        public void ServicePost(Secretario_Input secretario)
         {
-            var obj = new Models.Aluno()
+            var obj = new Models.Secretario()
             {
-                senha = aluno.senha,
-                nome = aluno.nome,
-                cpf = aluno.cpf,
-                rg = aluno.rg,
-                telefone = aluno.telefone,
-                email = aluno.email
+                senha = secretario.senha,
+                nome = secretario.nome,
+                cpf = secretario.cpf,
+                rg = secretario.rg,
+                telefone = secretario.telefone,
+                email = secretario.email,
+                cargo = Roles.Secretario
             };
 
             this.context.Add(obj);
             this.context.SaveChanges();
         }
 
-        public void UpdateAluno(int id, Aluno_Input aluno)
+        public void ServicePut(int id, Secretario_Input secretario)
         {
-            var obj = this.context.Alunos.FirstOrDefault(n => n.id == id);
+            var obj = this.context.Secretarios.FirstOrDefault(n => n.id == id);
 
-            obj.senha = aluno.senha;
-            obj.nome = aluno.nome;
-            obj.cpf = aluno.cpf;
-            obj.rg = aluno.rg;
-            obj.telefone = aluno.telefone;
-            obj.email = aluno.email;
-
+            obj.senha = secretario.senha;
+            obj.nome = secretario.nome;
+            obj.cpf = secretario.cpf;
+            obj.rg = secretario.rg;
+            obj.telefone = secretario.telefone;
+            obj.email = secretario.email;
+            
             this.context.SaveChanges();
         }
 
-        public void RemoveAluno(Models.Aluno aluno)
+        public void ServiceDelete(Models.Secretario secretario)
         {
-            this.context.Remove(aluno);
+            this.context.Remove(secretario);
             this.context.SaveChanges();
         }
     }

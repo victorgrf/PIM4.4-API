@@ -9,9 +9,10 @@ namespace API.Data.Models
         [Key] public int id { get; set; }
         public string senha { get; set; }
         public string nome { get; set; }
-        public Int64 cpf { get; set; }
-        public Int64 rg { get; set; }
-        public Int64? telefone { get; set;}
-        public string? email { get; set; }
+        public long cpf { get; set; }
+        public long rg { get; set; }
+        public long? telefone { get; set;}
+        public string email { get; set; }
+        public string cargo { get; set; }
     }
 }

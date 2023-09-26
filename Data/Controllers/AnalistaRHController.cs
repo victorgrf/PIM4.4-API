@@ -42,11 +42,13 @@ namespace API.Data.Controllers
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).FirstOrDefault();
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).FirstOrDefault();
-            if (test_cpf != null || test_rg != null)
+            var test_email = this.dbContext.Pessoas.Where(e => e.email == analistaRH.email).FirstOrDefault();
+            if (test_cpf != null || test_rg != null || test_email != null)
             {
                 var errorObj = new DuplicatedFieldError();
                 if (test_cpf != null) errorObj.AddField("cpf");
                 if (test_rg != null) errorObj.AddField("rg");
+                if (test_email != null) errorObj.AddField("email");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
@@ -59,11 +61,15 @@ namespace API.Data.Controllers
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).Where(e => e.id != id).FirstOrDefault();
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).Where(e => e.id != id).FirstOrDefault();
-            if ((test_cpf != null && analistaRH.cpf == test_cpf.cpf) || (test_rg != null && analistaRH.rg == test_rg.rg))
+            var test_email = this.dbContext.Pessoas.Where(e => e.email == analistaRH.email).Where(e => e.id != id).FirstOrDefault();
+            if ((test_cpf != null && analistaRH.cpf == test_cpf.cpf) ||
+                (test_rg != null && analistaRH.rg == test_rg.rg) ||
+                (test_email != null && analistaRH.email == test_email.email))
             {
                 var errorObj = new DuplicatedFieldError();
                 if (test_cpf != null) errorObj.AddField("cpf");
                 if (test_rg != null) errorObj.AddField("rg");
+                if (test_email != null) errorObj.AddField("email");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 

@@ -54,7 +54,7 @@ namespace API.Data.Controllers
         public IActionResult HttpPut(int id, Disciplina_Input disciplina)
         {
             var test_nome = this.dbContext.Disciplinas.Where(e => e.nome == disciplina.nome).Where(e => e.id != id).FirstOrDefault();
-            if (test_nome != null && disciplina.nome == test_nome.nome)
+            if (test_nome != null)
             {
                 var errorObj = new DuplicatedFieldError();
                 errorObj.AddField("nome");

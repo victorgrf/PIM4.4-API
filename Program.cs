@@ -1,7 +1,9 @@
+using API;
 using API.Data.Services;
 using API.Data.ViewModels;
 using API.DataBase;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -35,9 +37,7 @@ builder.Services.AddDbContext<DBContext>(option => option.UseMySql(
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Remove _Input ViewModels from Swagger documentation
+builder = Authorization.AddCustomSwaggerGen(builder); 
 
 var app = builder.Build();
 
@@ -49,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

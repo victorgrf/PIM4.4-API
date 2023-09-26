@@ -1,6 +1,7 @@
 ﻿using API.DataBase;
 using API.Data.ViewModels;
 using API.Data.Models;
+using API.Data.Identity;
 
 namespace API.Data.Services
 {
@@ -19,12 +20,12 @@ namespace API.Data.Services
                 .Select(professor => new ViewModels.Professor()
                 {
                     id = professor.id,
-                    senha = professor.senha,
                     nome = professor.nome,
                     cpf = professor.cpf,
                     rg = professor.rg,
                     telefone = professor.telefone,
-                    email = professor.email
+                    email = professor.email,
+                    cargo = professor.cargo
                 }).ToList();
             return response;
         }
@@ -36,12 +37,12 @@ namespace API.Data.Services
                 .Select(professor => new ViewModels.Professor()
                 {
                     id = professor.id,
-                    senha = professor.senha,
                     nome = professor.nome,
                     cpf = professor.cpf,
                     rg = professor.rg,
                     telefone = professor.telefone,
-                    email = professor.email
+                    email = professor.email,
+                    cargo = professor.cargo
                 }).FirstOrDefault();
 
             return response;
@@ -56,7 +57,8 @@ namespace API.Data.Services
                 cpf = professor.cpf,
                 rg = professor.rg,
                 telefone = professor.telefone,
-                email = professor.email
+                email = professor.email,
+                cargo = Roles.Professor
             };
 
             this.context.Add(obj);

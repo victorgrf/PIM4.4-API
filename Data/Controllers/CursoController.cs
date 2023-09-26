@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using API.Data.Services;
 using API.Data.ViewModels;
 using API.Data.Errors;
+using Microsoft.AspNetCore.Authorization;
+using API.Data.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Data.Controllers
 {
@@ -20,14 +23,18 @@ namespace API.Data.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public ActionResult<List<Curso>> HttpGetAll(string? nome)
         {
+            //AuthenticateService.ChecarCargo(new[] { "secretario" }, );
+
             var response = this.service.ServiceGetAll(nome);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public ActionResult<Curso> HttpGet(int id)
         {
             var response = this.service.ServiceGet(id);
@@ -36,6 +43,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpPost(Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).FirstOrDefault();
@@ -54,10 +62,11 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpPut(int id, Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).Where(e => e.id != id).FirstOrDefault();
-            if (test_nome != null && curso.nome == test_nome.nome)
+            if (test_nome != null)
             {
                 var errorObj = new DuplicatedFieldError();
                 errorObj.AddField("nome");
@@ -71,6 +80,7 @@ namespace API.Data.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpDelete(int id)
         {
             var table = this.dbContext.Cursos.Where(e => e.id == id).FirstOrDefault();

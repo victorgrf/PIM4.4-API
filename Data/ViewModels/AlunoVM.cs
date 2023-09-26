@@ -1,25 +1,42 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace API.Data.ViewModels
 {
     public class Aluno_Input
     {
-        [Required] [MaxLength(20)] public string senha { get; set; }
-        [Required] [MaxLength(255)] public string nome { get; set; }
-        [Required] [Range(1, Int64.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")] public Int64 cpf { get; set; }
-        [Required] [Range(1, Int64.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")] public Int64 rg { get; set; }
-        [Range(1, Int64.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")] public Int64? telefone { get; set; }
-        [MaxLength(255)] public string? email { get; set; }
+        [Required] 
+        [MaxLength(20)] 
+        public string senha { get; set; }
+
+        [Required] 
+        [MaxLength(255)] 
+        public string nome { get; set; }
+
+        [Required] 
+        [Range(1, long.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")] 
+        public long cpf { get; set; }
+
+        [Required] 
+        [Range(1, long.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
+        public long rg { get; set; }
+
+        [Required] 
+        [MaxLength(255)] 
+        public string email { get; set; }
+
+        [Range(1, long.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
+        public long? telefone { get; set; }
     }
 
     public class Aluno
     {
         public int id { get; set; }
-        public string senha { get; set; }
         public string nome { get; set; }
-        public Int64 cpf { get; set; }
-        public Int64 rg { get; set; }
-        public Int64? telefone { get; set; }
-        public string? email { get; set; }
+        public long cpf { get; set; }
+        public long rg { get; set; }
+        public long? telefone { get; set; }
+        public string email { get; set; }
+        public string cargo { get; set; }
     }
 }

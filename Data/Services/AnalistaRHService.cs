@@ -1,6 +1,7 @@
 ﻿using API.DataBase;
 using API.Data.ViewModels;
 using API.Data.Models;
+using API.Data.Identity;
 
 namespace API.Data.Services
 {
@@ -19,12 +20,12 @@ namespace API.Data.Services
                 .Select(analistaRH => new ViewModels.AnalistaRH()
                 {
                     id = analistaRH.id,
-                    senha = analistaRH.senha,
                     nome = analistaRH.nome,
                     cpf = analistaRH.cpf,
                     rg = analistaRH.rg,
                     telefone = analistaRH.telefone,
-                    email = analistaRH.email
+                    email = analistaRH.email,
+                    cargo = analistaRH.cargo
                 }).ToList();
             return response;
         }
@@ -36,12 +37,12 @@ namespace API.Data.Services
                 .Select(analistaRH => new ViewModels.AnalistaRH()
                 {
                     id = analistaRH.id,
-                    senha = analistaRH.senha,
                     nome = analistaRH.nome,
                     cpf = analistaRH.cpf,
                     rg = analistaRH.rg,
                     telefone = analistaRH.telefone,
-                    email = analistaRH.email
+                    email = analistaRH.email,
+                    cargo = analistaRH.cargo
                 }).FirstOrDefault();
 
             return response;
@@ -56,7 +57,8 @@ namespace API.Data.Services
                 cpf = analistaRH.cpf,
                 rg = analistaRH.rg,
                 telefone = analistaRH.telefone,
-                email = analistaRH.email
+                email = analistaRH.email,
+                cargo = Roles.AnalistaRH
             };
 
             this.context.Add(obj);
