@@ -28,7 +28,7 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<dynamic> Login(Login login)
+        public ActionResult<dynamic> Login([FromQuery] Login login)
         {
             var pessoa = this.authenticate.GetPessoa(login.id);
             if (pessoa == null)

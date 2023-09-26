@@ -15,10 +15,11 @@ namespace API
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
+                    Scheme = "Bearer",
                     In = ParameterLocation.Header,
-                    Description = "JWT ou JSON Web Token é um padrão da indústria definido pela RFC7519."
+                    Description = "A API PIM4.4 versão 1.0 utiliza tokens JWT (JSON Web Token) para validar seus requests. Utilize a rota \"api/login\" para obter seu token de validação e realizar seus requests como um usuário logado."
                 });
 
                 c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()

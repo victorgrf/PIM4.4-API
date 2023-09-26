@@ -4,7 +4,7 @@ namespace API.Data.Errors
 {
     public class RelatedTableError
     {
-        public string title {  get; private set; }
+        public string title { get; private set; }
         public int status { get; private set; }
         public List<Object> tables { get; private set; }
         public RelatedTableError()

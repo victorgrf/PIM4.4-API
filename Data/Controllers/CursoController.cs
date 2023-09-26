@@ -66,7 +66,7 @@ namespace API.Data.Controllers
         public IActionResult HttpPut(int id, Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).Where(e => e.id != id).FirstOrDefault();
-            if (test_nome != null)
+            if (test_nome != null && curso.nome == test_nome.nome)
             {
                 var errorObj = new DuplicatedFieldError();
                 errorObj.AddField("nome");
@@ -86,14 +86,15 @@ namespace API.Data.Controllers
             var table = this.dbContext.Cursos.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
-            var turma = this.dbContext.Turmas.Where(e => e.idCurso == table.id).ToList();
+            var turma = this.dbContext.Turmas.Where(e => e.idCurso == id).ToList();
             if (turma.Count > 0)
             {
+                var errorObj = new RelatedTableError();
+
                 var ids = new List<int>();
                 foreach (var t in turma) ids.Add(t.id);
-
-                var errorObj = new RelatedTableError();
                 errorObj.AddTable("turma", ids);
+
 
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }

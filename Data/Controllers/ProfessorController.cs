@@ -89,6 +89,19 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.Professores.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
+
+            var disciplinaMinistrada = this.dbContext.DisciplinaMinistradas.Where(e => e.idProfessor == id).ToList();
+            if (disciplinaMinistrada.Count > 0)
+            {
+                var ids = new List<int>();
+                foreach (var t in disciplinaMinistrada) ids.Add(t.id);
+
+                var errorObj = new RelatedTableError();
+                errorObj.AddTable("disciplinaMinistrada", ids);
+
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
             this.service.ServiceDelete(table);
             return Ok();
         }
