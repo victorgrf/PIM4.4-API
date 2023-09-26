@@ -15,7 +15,7 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 > Change Jwt secretKey, issuer and audience on appsettings.json!
 
 ## Rotas
-* GET api/login
+* GET api/login - Importante salvar o "token", o "refreshToken" e o "id"
 * GET api/login/refresh
 \
 &nbsp;

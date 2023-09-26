@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using API.Data.Services;
 using API.Data.ViewModels;
 using API.Data.Errors;
+using API.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Data.Controllers
 {
@@ -20,6 +22,7 @@ namespace API.Data.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<List<Professor>> HttpGetAll(string? nome)
         {
             var response = this.service.ServiceGetAll(nome);
@@ -28,6 +31,7 @@ namespace API.Data.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public ActionResult<Professor> HttpGet(int id)
         {
             var response = this.service.ServiceGet(id);
@@ -36,6 +40,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpPost(Professor_Input professor)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == professor.cpf).FirstOrDefault();
@@ -55,6 +60,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpPut(int id, Professor_Input professor)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == professor.cpf).Where(e => e.id != id).FirstOrDefault();
@@ -78,6 +84,7 @@ namespace API.Data.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpDelete(int id)
         {
             var table = this.dbContext.Professores.Where(e => e.id == id).FirstOrDefault();

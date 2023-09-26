@@ -5,6 +5,8 @@ using API.Data.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using API.Data.Errors;
+using API.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Data.Controllers
 {
@@ -22,6 +24,7 @@ namespace API.Data.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public ActionResult<List<AnalistaRH>> HttpGetAll(string? nome)
         {
             var response = this.service.ServiceGetAll(nome);
@@ -30,6 +33,7 @@ namespace API.Data.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public ActionResult<AnalistaRH> HttpGet(int id)
         {
             var response = this.service.ServiceGet(id);
@@ -38,6 +42,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpPost(AnalistaRH_Input analistaRH)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).FirstOrDefault();
@@ -57,6 +62,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpPut(int id, AnalistaRH_Input analistaRH)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).Where(e => e.id != id).FirstOrDefault();
@@ -80,6 +86,7 @@ namespace API.Data.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.AnalistaRH)]
         public IActionResult HttpDelete(int id)
         {
             var table = this.dbContext.AnalistasRH.Where(e => e.id == id).FirstOrDefault();

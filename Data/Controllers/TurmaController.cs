@@ -3,19 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 using API.Data.Services;
 using API.Data.ViewModels;
 using API.Data.Errors;
-using API.Data.Identity;
 using Microsoft.AspNetCore.Authorization;
+using API.Data.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Data.Controllers
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class DisciplinaController : ControllerBase
+    public class TurmaController : ControllerBase
     {
         private readonly DBContext dbContext;
-        private readonly DisciplinaService service;
+        private readonly TurmaService service;
 
-        public DisciplinaController(DBContext context, DisciplinaService service)
+        public TurmaController(DBContext context, TurmaService service)
         {
             this.dbContext = context;
             this.service = service;
@@ -23,8 +24,10 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<List<Disciplina>> HttpGetAll(string? nome)
+        public ActionResult<List<Turma>> HttpGetAll(string? nome)
         {
+            //AuthenticateService.ChecarCargo(new[] { "secretario" }, );
+
             var response = this.service.ServiceGetAll(nome);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
@@ -32,7 +35,7 @@ namespace API.Data.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<Disciplina> HttpGet(int id)
+        public ActionResult<Turma> HttpGet(int id)
         {
             var response = this.service.ServiceGet(id);
             if (response == null) return NotFound("Nenhum resultado obtido");
@@ -41,25 +44,28 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost(Disciplina_Input disciplina)
+        public IActionResult HttpPost(Turma_Input turma)
         {
-            var test_nome = this.dbContext.Disciplinas.Where(e => e.nome == disciplina.nome).FirstOrDefault();
+            var test_nome = this.dbContext.Turmas.Where(e => e.nome == turma.nome).FirstOrDefault();
             if (test_nome != null)
             {
-                var errorObj = new DuplicatedFieldError();
-                errorObj.AddField("nome");
-                return StatusCode(errorObj.GetStatusCode(), errorObj);
+                if (test_nome != null)
+                {
+                    var errorObj = new DuplicatedFieldError();
+                    errorObj.AddField("nome");
+                    return StatusCode(errorObj.GetStatusCode(), errorObj);
+                }
             }
 
-            this.service.ServicePost(disciplina);
+            this.service.ServicePost(turma);
             return Ok();
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, Disciplina_Input disciplina)
+        public IActionResult HttpPut(int id, Turma_Input turma)
         {
-            var test_nome = this.dbContext.Disciplinas.Where(e => e.nome == disciplina.nome).Where(e => e.id != id).FirstOrDefault();
+            var test_nome = this.dbContext.Turmas.Where(e => e.nome == turma.nome).Where(e => e.id != id).FirstOrDefault();
             if (test_nome != null)
             {
                 var errorObj = new DuplicatedFieldError();
@@ -67,9 +73,9 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            var table = this.dbContext.Disciplinas.Where(e => e.id == id).FirstOrDefault();
+            var table = this.dbContext.Turmas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
-            this.service.ServicePut(id, disciplina);
+            this.service.ServicePut(id, turma);
             return Ok();
         }
 
@@ -77,7 +83,7 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpDelete(int id)
         {
-            var table = this.dbContext.Disciplinas.Where(e => e.id == id).FirstOrDefault();
+            var table = this.dbContext.Turmas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
             this.service.ServiceDelete(table);
             return Ok();
