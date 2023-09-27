@@ -19,5 +19,6 @@ namespace API.DataBase
         public DbSet<Turma> Turmas { get; set; }
         public DbSet<DisciplinaMinistrada> DisciplinaMinistradas { get; set; }
         public DbSet<Conteudo> Conteudos { get; set; }
+        public DbSet<CursoMatriculado> CursoMatriculados { get; set; }
     }
 }

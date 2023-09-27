@@ -35,7 +35,7 @@ namespace API.Data.Controllers
             string caminho = Path.Combine(pasta, file);
             try
             {
-                var stream = new FileStream(caminho, FileMode.Open)
+                var stream = new FileStream(caminho, FileMode.Open);
                 return File(stream, "application/octet-stream", file);
             }
             catch (System.IO.FileNotFoundException)

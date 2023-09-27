@@ -89,6 +89,19 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.Alunos.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
+
+            var cursoMatriculado = this.dbContext.CursoMatriculados.Where(e => e.idTurma == id).ToList();
+            if (cursoMatriculado.Count > 0)
+            {
+                var errorObj = new RelatedTableError();
+
+                var ids = new List<int>();
+                foreach (var t in cursoMatriculado) ids.Add(t.id);
+                errorObj.AddTable("cursoMatriculado", ids);
+
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
             this.service.ServiceDelete(table);
             return Ok();
         }

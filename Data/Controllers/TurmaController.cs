@@ -104,13 +104,24 @@ namespace API.Data.Controllers
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
             var disciplinaMinistrada = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == id).ToList();
-            if (disciplinaMinistrada.Count > 0)
+            var cursoMatriculado = this.dbContext.CursoMatriculados.Where(e => e.idTurma == id).ToList();
+            if (disciplinaMinistrada.Count > 0 || cursoMatriculado.Count > 0)
             {
-                var ids = new List<int>();
-                foreach (var t in disciplinaMinistrada) ids.Add(t.id);
-
                 var errorObj = new RelatedTableError();
-                errorObj.AddTable("disciplinaMinistrada", ids);
+
+                if (disciplinaMinistrada.Count > 0)
+                {
+                    var ids = new List<int>();
+                    foreach (var t in disciplinaMinistrada) ids.Add(t.id);
+                    errorObj.AddTable("disciplinaMinistrada", ids);
+                }
+
+                if (cursoMatriculado.Count > 0)
+                {
+                    var ids = new List<int>();
+                    foreach (var t in cursoMatriculado) ids.Add(t.id);
+                    errorObj.AddTable("cursoMatriculado", ids);
+                }
 
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
