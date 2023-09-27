@@ -62,7 +62,7 @@ namespace API.Data.Controllers
                 return BadRequest("Limite de alunos nesta turma já atingido");
             }
 
-            else
+            else if (cursoMatriculados.Count > 0)
             {
                 var jaNaTurma = false;
                 foreach (var cm in cursoMatriculados)
@@ -108,26 +108,29 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            var cursoMatriculados = this.dbContext.CursoMatriculados.Where(e => e.idTurma == cursoMatriculado.idTurma).ToList();
-            if (cursoMatriculados.Count >= 75)
+            if (table.idAluno != cursoMatriculado.idAluno)
             {
-                return BadRequest("Limite de alunos nesta turma já atingido");
-            }
-
-            else
-            {
-                var jaNaTurma = false;
-                foreach (var cm in cursoMatriculados)
+                var cursoMatriculados = this.dbContext.CursoMatriculados.Where(e => e.idTurma == cursoMatriculado.idTurma).ToList();
+                if (cursoMatriculados.Count >= 75)
                 {
-                    if (cm.idAluno == cursoMatriculado.idAluno)
-                    {
-                        jaNaTurma = true;
-                    }
+                    return BadRequest("Limite de alunos nesta turma já atingido");
                 }
 
-                if (jaNaTurma)
+                else if (cursoMatriculados.Count > 0)
                 {
-                    return BadRequest("Este aluno já faz parte desta turma");
+                    var jaNaTurma = false;
+                    foreach (var cm in cursoMatriculados)
+                    {
+                        if (cm.idAluno == cursoMatriculado.idAluno)
+                        {
+                            jaNaTurma = true;
+                        }
+                    }
+
+                    if (jaNaTurma)
+                    {
+                        return BadRequest("Este aluno já faz parte desta turma");
+                    }
                 }
             }
 

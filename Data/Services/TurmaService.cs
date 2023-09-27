@@ -91,6 +91,65 @@ namespace API.Data.Services
                         }).FirstOrDefault());
                     }
                 }
+
+                List<Models.DisciplinaMinistrada> disciplinaMinistradas = this.context.DisciplinaMinistradas
+                .Where(e => e.idTurma == r.id).ToList();
+
+                if (disciplinaMinistradas.Count > 0)
+                {
+                    r.professores = new List<ViewModels.Professor?>();
+                    foreach (var dm in disciplinaMinistradas)
+                    {
+                        var toAdd = this.context.Professores
+                        .Where(n => n.id == dm.idProfessor)
+                        .Select(professor => new ViewModels.Professor()
+                        {
+                            id = professor.id,
+                            nome = professor.nome,
+                            cpf = professor.cpf,
+                            rg = professor.rg,
+                            telefone = professor.telefone,
+                            email = professor.email,
+                            cargo = professor.cargo,
+                            disciplinasMinistradas = this.context.DisciplinaMinistradas
+                            .Where(n => n.idProfessor == professor.id)
+                            .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
+                            {
+                                id = disciplinaMinistrada.id,
+                                disciplina = this.context.Disciplinas
+                                    .Where(n => n.id == disciplinaMinistrada.idDisciplina)
+                                    .Select(disciplina => new ViewModels.Disciplina()
+                                    {
+                                        id = disciplina.id,
+                                        nome = disciplina.nome
+                                    }).FirstOrDefault(),
+                                turma = this.context.Turmas
+                                    .Where(n => n.id == disciplinaMinistrada.idTurma)
+                                    .Select(turma => new ViewModels.Turma()
+                                    {
+                                        id = turma.id,
+                                        nome = turma.nome,
+                                        curso = this.context.Cursos
+                                        .Where(n => n.id == turma.idCurso)
+                                        .Select(curso => new ViewModels.Curso()
+                                        {
+                                            id = curso.id,
+                                            nome = curso.nome,
+                                            cargaHoraria = curso.cargaHoraria,
+                                            aulasTotais = curso.aulasTotais
+                                        }).FirstOrDefault()
+                                    }).FirstOrDefault(),
+                                coordenador = disciplinaMinistrada.coordenador
+                            }).ToList(),
+                        }).FirstOrDefault();
+
+                        r.professores.Add(toAdd);
+                        if (dm.coordenador == true)
+                        {
+                            r.coordenador = toAdd;
+                        }
+                    }
+                }
             }
 
             return response;
@@ -105,14 +164,14 @@ namespace API.Data.Services
                     id = turma.id,
                     nome = turma.nome,
                     curso = this.context.Cursos
-                        .Where(n => n.id == turma.idCurso)
-                        .Select(curso => new ViewModels.Curso()
-                        {
-                            id = curso.id,
-                            nome = curso.nome,
-                            cargaHoraria = curso.cargaHoraria,
-                            aulasTotais = curso.aulasTotais
-                        }).FirstOrDefault()
+                    .Where(n => n.id == turma.idCurso)
+                    .Select(curso => new ViewModels.Curso()
+                    {
+                        id = curso.id,
+                        nome = curso.nome,
+                        cargaHoraria = curso.cargaHoraria,
+                        aulasTotais = curso.aulasTotais
+                    }).FirstOrDefault()
                 }).FirstOrDefault();
 
             List<Models.CursoMatriculado>? cursosMatriculados = this.context.CursoMatriculados
@@ -169,6 +228,65 @@ namespace API.Data.Services
                             }).FirstOrDefault()
                         }).ToList()
                     }).FirstOrDefault());
+                }
+            }
+
+            List<Models.DisciplinaMinistrada> disciplinaMinistradas = this.context.DisciplinaMinistradas
+            .Where(e => e.idTurma == response.id).ToList();
+
+            if (disciplinaMinistradas.Count > 0)
+            {
+                response.professores = new List<ViewModels.Professor?>();
+                foreach (var dm in disciplinaMinistradas)
+                {
+                    var toAdd = this.context.Professores
+                    .Where(n => n.id == dm.idProfessor)
+                    .Select(professor => new ViewModels.Professor()
+                    {
+                        id = professor.id,
+                        nome = professor.nome,
+                        cpf = professor.cpf,
+                        rg = professor.rg,
+                        telefone = professor.telefone,
+                        email = professor.email,
+                        cargo = professor.cargo,
+                        disciplinasMinistradas = this.context.DisciplinaMinistradas
+                        .Where(n => n.idProfessor == professor.id)
+                        .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
+                        {
+                            id = disciplinaMinistrada.id,
+                            disciplina = this.context.Disciplinas
+                                .Where(n => n.id == disciplinaMinistrada.idDisciplina)
+                                .Select(disciplina => new ViewModels.Disciplina()
+                                {
+                                    id = disciplina.id,
+                                    nome = disciplina.nome
+                                }).FirstOrDefault(),
+                            turma = this.context.Turmas
+                                .Where(n => n.id == disciplinaMinistrada.idTurma)
+                                .Select(turma => new ViewModels.Turma()
+                                {
+                                    id = turma.id,
+                                    nome = turma.nome,
+                                    curso = this.context.Cursos
+                                    .Where(n => n.id == turma.idCurso)
+                                    .Select(curso => new ViewModels.Curso()
+                                    {
+                                        id = curso.id,
+                                        nome = curso.nome,
+                                        cargaHoraria = curso.cargaHoraria,
+                                        aulasTotais = curso.aulasTotais
+                                    }).FirstOrDefault()
+                                }).FirstOrDefault(),
+                            coordenador = disciplinaMinistrada.coordenador
+                        }).ToList(),
+                    }).FirstOrDefault();
+
+                    response.professores.Add(toAdd);
+                    if (dm.coordenador == true)
+                    {
+                        response.coordenador = toAdd;
+                    }
                 }
             }
 

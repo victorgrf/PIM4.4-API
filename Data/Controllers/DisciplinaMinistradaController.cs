@@ -44,17 +44,6 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpPost([FromForm] DisciplinaMinistrada_Input disciplinaMinistrada)
         {
-            var test_coordenador = this.dbContext.DisciplinaMinistradas
-                .Where(e => e.idTurma == disciplinaMinistrada.idTurma)
-                .Where(e => e.idProfessor == disciplinaMinistrada.idProfessor)
-                .Where(e => e.coordenador == true) .FirstOrDefault();
-            if (test_coordenador != null)
-            {
-                var errorObj = new DuplicatedFieldError();
-                errorObj.AddField("coordenador");
-                return StatusCode(errorObj.GetStatusCode(), errorObj);
-            }
-
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == disciplinaMinistrada.idDisciplina);
             var turma = this.dbContext.Turmas.FirstOrDefault(e => e.id == disciplinaMinistrada.idTurma);
             var professor = this.dbContext.Professores.FirstOrDefault(e => e.id == disciplinaMinistrada.idProfessor);
@@ -67,6 +56,35 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
+            var disciplinaMinistradas = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == disciplinaMinistrada.idTurma).ToList();
+            if  (disciplinaMinistradas.Count > 0)
+            {
+                var jaNaTurma = false;
+                var temCoordenador = false;
+                foreach (var dm in disciplinaMinistradas)
+                {
+                    if (dm.idProfessor == disciplinaMinistrada.idProfessor && dm.idDisciplina == disciplinaMinistrada.idDisciplina)
+                    {
+                        jaNaTurma = true;
+                    }
+
+                    if (dm.coordenador == true && disciplinaMinistrada.coordenador == true)
+                    {
+                        temCoordenador = true;
+                    }
+                }
+
+                if (jaNaTurma)
+                {
+                    return BadRequest("Este professor já ministra esta disciplina nesta turma");
+                }
+
+                if (temCoordenador)
+                {
+                    return BadRequest("Esta turma já tem um coordenador");
+                }
+            }
+
             this.service.ServicePost(disciplinaMinistrada);
             return Ok();
         }
@@ -75,17 +93,6 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpPut(int id, [FromForm] DisciplinaMinistrada_Input disciplinaMinistrada)
         {
-            var test_coordenador = this.dbContext.DisciplinaMinistradas
-                .Where(e => e.idTurma == disciplinaMinistrada.idTurma)
-                .Where(e => e.idProfessor == disciplinaMinistrada.idProfessor)
-                .Where(e => e.coordenador == true).FirstOrDefault();
-            if (test_coordenador != null && disciplinaMinistrada.coordenador == test_coordenador.coordenador)
-            {
-                var errorObj = new DuplicatedFieldError();
-                errorObj.AddField("coordenador");
-                return StatusCode(errorObj.GetStatusCode(), errorObj);
-            }
-
             var table = this.dbContext.DisciplinaMinistradas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
@@ -99,6 +106,48 @@ namespace API.Data.Controllers
                 if (turma == null) errorObj.AddId("turma", disciplinaMinistrada.idTurma);
                 if (professor == null) errorObj.AddId("professor", disciplinaMinistrada.idProfessor);
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            if (table.coordenador != disciplinaMinistrada.coordenador && disciplinaMinistrada.coordenador == true)
+            {
+                var disciplinaMinistradas = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == disciplinaMinistrada.idTurma).ToList();
+                if (disciplinaMinistradas.Count > 0)
+                {
+                    var temCoordenador = false;
+                    foreach (var dm in disciplinaMinistradas)
+                    {
+                        if (dm.coordenador == true)
+                        {
+                            temCoordenador = true;
+                        }
+                    }
+
+                    if (temCoordenador)
+                    {
+                        return BadRequest("Esta turma já tem um coordenador");
+                    }
+                }
+            }
+
+            if (table.idProfessor != disciplinaMinistrada.idProfessor)
+            { 
+                var disciplinaMinistradas = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == disciplinaMinistrada.idTurma).ToList();
+                if (disciplinaMinistradas.Count > 0)
+                {
+                    var jaNaTurma = false;
+                    foreach (var dm in disciplinaMinistradas)
+                    {
+                        if (dm.idProfessor == disciplinaMinistrada.idProfessor && dm.idDisciplina == disciplinaMinistrada.idDisciplina)
+                        {
+                            jaNaTurma = true;
+                        }
+                    }
+
+                    if (jaNaTurma)
+                    {
+                        return BadRequest("Este professor já ministra esta disciplina nesta turma");
+                    }
+                }
             }
 
             this.service.ServicePut(id, disciplinaMinistrada);

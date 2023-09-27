@@ -20,5 +20,7 @@ namespace API.Data.ViewModels
         public string nome { get; set; }
         public ViewModels.Curso? curso { get; set; }
         public List<ViewModels.Aluno?>? alunos { get; set; }
+        public List<ViewModels.Professor?>? professores { get; set; }
+        public ViewModels.Professor? coordenador { get; set; }
     }
 }
