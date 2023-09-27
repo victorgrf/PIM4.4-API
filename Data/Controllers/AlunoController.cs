@@ -90,7 +90,7 @@ namespace API.Data.Controllers
             var table = this.dbContext.Alunos.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
-            var cursoMatriculado = this.dbContext.CursoMatriculados.Where(e => e.idTurma == id).ToList();
+            var cursoMatriculado = this.dbContext.CursoMatriculados.Where(e => e.idAluno == id).ToList();
             if (cursoMatriculado.Count > 0)
             {
                 var errorObj = new RelatedTableError();

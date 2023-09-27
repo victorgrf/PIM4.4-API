@@ -5,11 +5,13 @@ namespace API.Data.Errors
     public class RelatedTableError
     {
         public string title { get; private set; }
+        public string description { get; private set; }
         public int status { get; private set; }
         public List<Object> tables { get; private set; }
         public RelatedTableError()
         {
-            this.title = "Este cadastro não pode ser deletado pois está ligado a outro(s).";
+            this.title = "Cadastros relacionados impedindo o DELETE.";
+            this.description = "Este cadastro não pode ser deletado pois está ligado a outro(s) no banco de dados. Delete os cadastros em questão para permitir esta ação.";
             this.status = GetStatusCode();
             this.tables = new List<Object>();
         }

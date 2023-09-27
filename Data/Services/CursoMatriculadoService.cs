@@ -59,7 +59,20 @@ namespace API.Data.Services
                     telefone = aluno.telefone,
                     email = aluno.email,
                     cargo = aluno.cargo
-                }).FirstOrDefault()
+                }).FirstOrDefault(),
+                disciplinas = this.context.DisciplinaCursadas
+                .Where(n => n.idCursoMatriculado == cursoMatriculado.id)
+                .Select(disciplinaCursada => new ViewModels.DisciplinaCursada()
+                {
+                    id = disciplinaCursada.id,
+                    prova1 = disciplinaCursada.prova1,
+                    prova2 = disciplinaCursada.prova2,
+                    trabalho = disciplinaCursada.trabalho,
+                    media = disciplinaCursada.media,
+                    faltas = disciplinaCursada.faltas,
+                    situacao = disciplinaCursada.situacao,
+                    frequencia = disciplinaCursada.frequencia,
+                }).ToList()
             }).ToList();
             return response;
         }
@@ -110,7 +123,20 @@ namespace API.Data.Services
                     telefone = aluno.telefone,
                     email = aluno.email,
                     cargo = aluno.cargo
-                }).FirstOrDefault()
+                }).FirstOrDefault(),
+                disciplinas = this.context.DisciplinaCursadas
+                .Where(n => n.idCursoMatriculado == cursoMatriculado.id)
+                .Select(disciplinaCursada => new ViewModels.DisciplinaCursada()
+                {
+                    id = disciplinaCursada.id,
+                    prova1 = disciplinaCursada.prova1,
+                    prova2 = disciplinaCursada.prova2,
+                    trabalho = disciplinaCursada.trabalho,
+                    media = disciplinaCursada.media,
+                    faltas = disciplinaCursada.faltas,
+                    situacao = disciplinaCursada.situacao,
+                    frequencia = disciplinaCursada.frequencia,
+                }).ToList()
             }).FirstOrDefault();
 
             return response;

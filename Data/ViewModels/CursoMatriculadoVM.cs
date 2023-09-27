@@ -37,5 +37,6 @@ namespace API.Data.ViewModels
         public int semestreAtual { get; set; }
         public bool trancado { get; set; }
         public bool finalizado { get; set; }
+        public List<DisciplinaCursada>? disciplinas { get; set; }
     }
 }

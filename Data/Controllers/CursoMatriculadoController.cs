@@ -58,7 +58,7 @@ namespace API.Data.Controllers
 
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
-                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso);
+                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
@@ -87,7 +87,7 @@ namespace API.Data.Controllers
 
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
-                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso);
+                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 

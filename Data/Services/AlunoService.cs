@@ -25,7 +25,41 @@ namespace API.Data.Services
                     rg = aluno.rg,
                     telefone = aluno.telefone,
                     email = aluno.email,
-                    cargo = aluno.cargo
+                    cargo = aluno.cargo,
+                    cursos = this.context.CursoMatriculados
+                    .Where(n => n.idAluno == aluno.id)
+                    .Select(cursoMatriculado => new ViewModels.CursoMatriculado()
+                    {
+                        id = cursoMatriculado.id,
+                        semestreAtual = cursoMatriculado.semestreAtual,
+                        trancado = cursoMatriculado.trancado,
+                        finalizado = cursoMatriculado.finalizado,
+                        turma = this.context.Turmas
+                        .Where(n => n.id == cursoMatriculado.idTurma)
+                        .Select(turma => new ViewModels.Turma()
+                        {
+                            id = turma.id,
+                            nome = turma.nome,
+                            curso = this.context.Cursos
+                            .Where(n => n.id == turma.idCurso)
+                            .Select(curso => new ViewModels.Curso()
+                            {
+                                id = curso.id,
+                                nome = curso.nome,
+                                cargaHoraria = curso.cargaHoraria,
+                                aulasTotais = curso.aulasTotais
+                            }).FirstOrDefault()
+                        }).FirstOrDefault(),
+                        curso = this.context.Cursos
+                        .Where(n => n.id == cursoMatriculado.idCurso)
+                        .Select(curso => new ViewModels.Curso()
+                        {
+                            id = curso.id,
+                            nome = curso.nome,
+                            cargaHoraria = curso.cargaHoraria,
+                            aulasTotais = curso.aulasTotais
+                        }).FirstOrDefault()
+                    }).ToList()
                 }).ToList();
             return response;
         }
@@ -42,7 +76,41 @@ namespace API.Data.Services
                     rg = aluno.rg,
                     telefone = aluno.telefone,
                     email = aluno.email,
-                    cargo = aluno.cargo
+                    cargo = aluno.cargo,
+                    cursos = this.context.CursoMatriculados
+                    .Where(n => n.idAluno == aluno.id)
+                    .Select(cursoMatriculado => new ViewModels.CursoMatriculado()
+                    {
+                        id = cursoMatriculado.id,
+                        semestreAtual = cursoMatriculado.semestreAtual,
+                        trancado = cursoMatriculado.trancado,
+                        finalizado = cursoMatriculado.finalizado,
+                        turma = this.context.Turmas
+                        .Where(n => n.id == cursoMatriculado.idTurma)
+                        .Select(turma => new ViewModels.Turma()
+                        {
+                            id = turma.id,
+                            nome = turma.nome,
+                            curso = this.context.Cursos
+                            .Where(n => n.id == turma.idCurso)
+                            .Select(curso => new ViewModels.Curso()
+                            {
+                                id = curso.id,
+                                nome = curso.nome,
+                                cargaHoraria = curso.cargaHoraria,
+                                aulasTotais = curso.aulasTotais
+                            }).FirstOrDefault()
+                        }).FirstOrDefault(),
+                        curso = this.context.Cursos
+                        .Where(n => n.id == cursoMatriculado.idCurso)
+                        .Select(curso => new ViewModels.Curso()
+                        {
+                            id = curso.id,
+                            nome = curso.nome,
+                            cargaHoraria = curso.cargaHoraria,
+                            aulasTotais = curso.aulasTotais
+                        }).FirstOrDefault()
+                    }).ToList()
                 }).FirstOrDefault();
 
             return response;

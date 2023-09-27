@@ -27,35 +27,35 @@ namespace API.Data.Services
                     email = professor.email,
                     cargo = professor.cargo,
                     disciplinasMinistradas = this.context.DisciplinaMinistradas
-                        .Where(n => n.idProfessor == professor.id)
-                        .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
-                        {
-                            id = disciplinaMinistrada.id,
-                            disciplina = this.context.Disciplinas
-                                .Where(n => n.id == disciplinaMinistrada.idDisciplina)
-                                .Select(disciplina => new ViewModels.Disciplina()
+                    .Where(n => n.idProfessor == professor.id)
+                    .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
+                    {
+                        id = disciplinaMinistrada.id,
+                        disciplina = this.context.Disciplinas
+                            .Where(n => n.id == disciplinaMinistrada.idDisciplina)
+                            .Select(disciplina => new ViewModels.Disciplina()
+                            {
+                                id = disciplina.id,
+                                nome = disciplina.nome
+                            }).FirstOrDefault(),
+                        turma = this.context.Turmas
+                            .Where(n => n.id == disciplinaMinistrada.idTurma)
+                            .Select(turma => new ViewModels.Turma()
+                            {
+                                id = turma.id,
+                                nome = turma.nome,
+                                curso = this.context.Cursos
+                                .Where(n => n.id == turma.idCurso)
+                                .Select(curso => new ViewModels.Curso()
                                 {
-                                    id = disciplina.id,
-                                    nome = disciplina.nome
-                                }).FirstOrDefault(),
-                            turma = this.context.Turmas
-                                .Where(n => n.id == disciplinaMinistrada.idTurma)
-                                .Select(turma => new ViewModels.Turma()
-                                {
-                                    id = turma.id,
-                                    nome = turma.nome,
-                                    curso = this.context.Cursos
-                                    .Where(n => n.id == turma.idCurso)
-                                    .Select(curso => new ViewModels.Curso()
-                                    {
-                                        id = curso.id,
-                                        nome = curso.nome,
-                                        cargaHoraria = curso.cargaHoraria,
-                                        aulasTotais = curso.aulasTotais
-                                    }).FirstOrDefault()
-                                }).FirstOrDefault(),
-                            coordenador = disciplinaMinistrada.coordenador
-                        }).ToList(),
+                                    id = curso.id,
+                                    nome = curso.nome,
+                                    cargaHoraria = curso.cargaHoraria,
+                                    aulasTotais = curso.aulasTotais
+                                }).FirstOrDefault()
+                            }).FirstOrDefault(),
+                        coordenador = disciplinaMinistrada.coordenador
+                    }).ToList(),
                 }).ToList();
             return response;
         }
@@ -74,35 +74,35 @@ namespace API.Data.Services
                     email = professor.email,
                     cargo = professor.cargo,
                     disciplinasMinistradas = this.context.DisciplinaMinistradas
-                        .Where(n => n.idProfessor == professor.id)
-                        .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
-                        {
-                            id = disciplinaMinistrada.id,
-                            disciplina = this.context.Disciplinas
-                                .Where(n => n.id == disciplinaMinistrada.idDisciplina)
-                                .Select(disciplina => new ViewModels.Disciplina()
+                    .Where(n => n.idProfessor == professor.id)
+                    .Select(disciplinaMinistrada => new ViewModels.DisciplinaMinistrada()
+                    {
+                        id = disciplinaMinistrada.id,
+                        disciplina = this.context.Disciplinas
+                            .Where(n => n.id == disciplinaMinistrada.idDisciplina)
+                            .Select(disciplina => new ViewModels.Disciplina()
+                            {
+                                id = disciplina.id,
+                                nome = disciplina.nome
+                            }).FirstOrDefault(),
+                        turma = this.context.Turmas
+                            .Where(n => n.id == disciplinaMinistrada.idTurma)
+                            .Select(turma => new ViewModels.Turma()
+                            {
+                                id = turma.id,
+                                nome = turma.nome,
+                                curso = this.context.Cursos
+                                .Where(n => n.id == turma.idCurso)
+                                .Select(curso => new ViewModels.Curso()
                                 {
-                                    id = disciplina.id,
-                                    nome = disciplina.nome
-                                }).FirstOrDefault(),
-                            turma = this.context.Turmas
-                                .Where(n => n.id == disciplinaMinistrada.idTurma)
-                                .Select(turma => new ViewModels.Turma()
-                                {
-                                    id = turma.id,
-                                    nome = turma.nome,
-                                    curso = this.context.Cursos
-                                    .Where(n => n.id == turma.idCurso)
-                                    .Select(curso => new ViewModels.Curso()
-                                    {
-                                        id = curso.id,
-                                        nome = curso.nome,
-                                        cargaHoraria = curso.cargaHoraria,
-                                        aulasTotais = curso.aulasTotais
-                                    }).FirstOrDefault()
-                                }).FirstOrDefault(),
-                            coordenador = disciplinaMinistrada.coordenador
-                        }).ToList(),
+                                    id = curso.id,
+                                    nome = curso.nome,
+                                    cargaHoraria = curso.cargaHoraria,
+                                    aulasTotais = curso.aulasTotais
+                                }).FirstOrDefault()
+                            }).FirstOrDefault(),
+                        coordenador = disciplinaMinistrada.coordenador
+                    }).ToList(),
                 }).FirstOrDefault();
 
             return response;

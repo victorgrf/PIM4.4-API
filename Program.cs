@@ -29,6 +29,7 @@ builder.Services.AddTransient<TurmaService>();
 builder.Services.AddTransient<DisciplinaMinistradaService>();
 builder.Services.AddTransient<ConteudoService>();
 builder.Services.AddTransient<CursoMatriculadoService>();
+builder.Services.AddTransient<DisciplinaCursadaService>();
 
 // Connect to MySQL DataBase.
 var connectionStr = builder.Configuration.GetConnectionString("ConnectionMySQL");

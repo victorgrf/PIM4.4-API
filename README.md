@@ -66,6 +66,17 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * DELETE api/curso/{id}
 \
 &nbsp;
+* GET api/turma
+* GET api/turma/{id}
+* POST api/turma
+* PUT api/turma
+* DELETE api/turma/{id}
+* POST api/turma/aluno - NOT IMPLEMENTED YET
+* DELETE api/turma/aluno - NOT IMPLEMENTED YET
+* POST api/turma/coordenador - NOT IMPLEMENTED YET
+* DELETE api/turma/coordenador - NOT IMPLEMENTED YET
+\
+&nbsp;
 * GET api/disciplinaministrada
 * GET api/disciplinaministrada/{id}
 * POST api/disciplinaministrada
@@ -73,8 +84,18 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * DELETE api/disciplinaministrada/{id}
 \
 &nbsp;
-* GET api/cursoministrado
-* GET api/cursoministrado/{id}
-* POST api/cursoministrado
-* PUT api/cursoministrado
-* DELETE api/cursoministrado/{id}
+* GET api/cursomatriculado
+* GET api/cursomatriculado/{id}
+* POST api/cursomatriculado
+* PUT api/cursomatriculado
+* DELETE api/cursomatriculado/{id}
+\
+&nbsp;
+* GET api/disciplinacursada
+* GET api/disciplinacursada/{id}
+* POST api/disciplinacursada
+* PUT api/disciplinacursada
+* DELETE api/disciplinacursada/{id}
+* PUT api/disciplinacursada/media/{id}
+* PUT api/disciplinacursada/frequencia/{id}
+* PUT api/disciplinacursada/situacao/{id}

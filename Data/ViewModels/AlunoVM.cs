@@ -38,5 +38,6 @@ namespace API.Data.ViewModels
         public long? telefone { get; set; }
         public string email { get; set; }
         public string cargo { get; set; }
+        public List<ViewModels.CursoMatriculado>? cursos { get; set; }
     }
 }
