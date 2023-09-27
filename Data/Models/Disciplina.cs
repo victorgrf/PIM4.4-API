@@ -8,5 +8,8 @@ namespace API.Data.Models
     {
         [Key] public int id { get; set; }
         public string nome { get; set; }
+
+        // Relacionamento
+        public List<Curso_Disciplina> curso_disciplinas { get; set; }
     }
 }

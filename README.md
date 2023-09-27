@@ -64,6 +64,8 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * POST api/curso
 * PUT api/curso
 * DELETE api/curso/{id}
+* POST api/curso/disciplina
+* DELETE api/curso/disciplina
 \
 &nbsp;
 * GET api/turma

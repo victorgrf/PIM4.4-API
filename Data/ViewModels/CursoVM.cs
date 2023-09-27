@@ -24,5 +24,6 @@ namespace API.Data.ViewModels
         public string nome { get; set; }
         public int cargaHoraria { get; set; }
         public int aulasTotais { get; set; }
+        public List<Disciplina?>? disciplinas{ get; set; }
     }
 }

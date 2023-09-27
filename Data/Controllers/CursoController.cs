@@ -113,5 +113,56 @@ namespace API.Data.Controllers
             this.service.ServiceDelete(table);
             return Ok();
         }
+
+        [HttpPost("disciplina")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult AddDisciplina([FromForm] Curso_Disciplina_Input curso_disciplina)
+        {
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == curso_disciplina.idCurso);
+            var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == curso_disciplina.idDisciplina);
+            if (disciplina == null || curso == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                if (disciplina == null) errorObj.AddId("disciplina", curso_disciplina.idDisciplina);
+                if (curso == null) errorObj.AddId("curso", curso_disciplina.idCurso);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var exists = this.dbContext.Curso_Disciplinas
+            .Where(e => e.idCurso == curso_disciplina.idCurso)
+            .FirstOrDefault(e => e.idDisciplina == curso_disciplina.idDisciplina);
+            if (exists != null)
+            {
+                var errorObj = new DuplicatedFieldError();
+                errorObj.AddField("disciplina");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            this.service.ServiceAddDisciplina(curso_disciplina);
+            return Ok();
+        }
+
+        [HttpDelete("disciplina")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult RemoveDisciplina([FromForm] Curso_Disciplina_Input curso_disciplina)
+        {
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == curso_disciplina.idCurso);
+            var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == curso_disciplina.idDisciplina);
+            if (disciplina == null || curso == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                if (disciplina == null) errorObj.AddId("disciplina", curso_disciplina.idDisciplina);
+                if (curso == null) errorObj.AddId("curso", curso_disciplina.idCurso);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var exists = this.dbContext.Curso_Disciplinas
+            .Where(e => e.idCurso == curso_disciplina.idCurso)
+            .FirstOrDefault(e => e.idDisciplina == curso_disciplina.idDisciplina);
+            if (exists == null) return NotFound("Nenhuma tabela deste tipo de entidade e com estes ids foi encontrada no banco de dados");
+
+            this.service.ServiceRemoveDisciplina(exists);
+            return Ok();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace API.Data.Services
         }
 
         public List<ViewModels.Curso> ServiceGetAll(string? nome)
-        {
+        { 
             var response = this.context.Cursos
                 .Where(nome != null ? n => n.nome.Contains(nome) : n => n.id != 0)
                 .Select(curso => new ViewModels.Curso()
@@ -23,6 +23,27 @@ namespace API.Data.Services
                     cargaHoraria = curso.cargaHoraria,
                     aulasTotais = curso.aulasTotais
                 }).ToList();
+
+            foreach (var r in response)
+            {
+                List<Models.Curso_Disciplina> cursos_disciplinas = this.context.Curso_Disciplinas
+                .Where(e => e.idCurso == r.id).ToList();
+
+                if (cursos_disciplinas.Count > 0)
+                {
+                    r.disciplinas = new List<ViewModels.Disciplina?>();
+                    foreach (var cd in cursos_disciplinas)
+                    {
+                        r.disciplinas.Add(this.context.Disciplinas
+                        .Where(n => n.id == cd.idDisciplina)
+                        .Select(disciplina => new ViewModels.Disciplina()
+                        {
+                            id = disciplina.id,
+                            nome = disciplina.nome
+                        }).FirstOrDefault());
+                    }
+                }
+            }
             return response;
         }
 
@@ -37,6 +58,25 @@ namespace API.Data.Services
                     cargaHoraria = curso.cargaHoraria,
                     aulasTotais = curso.aulasTotais
                 }).FirstOrDefault();
+
+            List<Models.Curso_Disciplina> cursos_disciplinas = this.context.Curso_Disciplinas
+            .Where(e => e.idCurso == response.id).ToList();
+
+            if (cursos_disciplinas != null)
+            {
+                response.disciplinas = new List<ViewModels.Disciplina?>();
+                foreach (var cd in cursos_disciplinas)
+                {
+                    response.disciplinas.Add(this.context.Disciplinas
+                    .Where(n => n.id == cd.idDisciplina)
+                    .Select(disciplina => new ViewModels.Disciplina()
+                    {
+                        id = disciplina.id,
+                        nome = disciplina.nome
+                    }).FirstOrDefault());
+                }
+            }
+
 
             return response;
         }
@@ -69,6 +109,19 @@ namespace API.Data.Services
         public void ServiceDelete(Models.Curso curso)
         {
             this.context.Remove(curso);
+            this.context.SaveChanges();
+        }
+
+        public void ServiceAddDisciplina(ViewModels.Curso_Disciplina_Input curso_disciplina)
+        {
+            var obj = new Models.Curso_Disciplina(curso_disciplina.idCurso, curso_disciplina.idDisciplina);
+            this.context.Add(obj);
+            this.context.SaveChanges();
+        }
+
+        public void ServiceRemoveDisciplina(Models.Curso_Disciplina curso_disciplina)
+        {
+            this.context.Remove(curso_disciplina);
             this.context.SaveChanges();
         }
     }

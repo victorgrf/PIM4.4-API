@@ -11,5 +11,8 @@ namespace API.Data.Models
         public string nome { get; set; }
         public int cargaHoraria { get; set; }
         public int aulasTotais { get; set; }
+
+        // Relacionamento
+        public List<Curso_Disciplina> curso_disciplinas { get; set; }
     }
 }
