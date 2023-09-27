@@ -129,5 +129,37 @@ namespace API.Data.Controllers
             this.service.ServiceDelete(table);
             return Ok();
         }
+
+        [HttpPost("professor/{id}")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult PostProfessor(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
+
+        [HttpDelete("professor/{id}")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult DeleteProfessor(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
+
+        [HttpPost("coordenador/{id}")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult PostCoordenador(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
+
+        [HttpDelete("coordenador/{id}")]
+        [Authorize(Roles = Roles.Secretario)]
+        public IActionResult DeleteCoordenador(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
     }
 }

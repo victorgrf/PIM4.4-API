@@ -18,7 +18,7 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * GET api/login - Importante salvar o "token", o "refreshToken" e o "id"
 * POST api/login/refresh
 * POST api/login/startup
-* PUT api/login/mudarsenha
+* PUT api/login/mudarsenha - NOT IMPLEMENTED YET
 \
 &nbsp;
 * GET api/file/conteudo
@@ -50,6 +50,10 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * POST api/aluno
 * PUT api/aluno
 * DELETE api/aluno/{id}
+* GET api/aluno/boletim/{id} - NOT IMPLEMENTED YET
+* GET api/aluno/declaracao/{id} - NOT IMPLEMENTED YET
+* GET api/aluno/historico/{id} - NOT IMPLEMENTED YET
+* GET api/aluno/relatorio/{id} - NOT IMPLEMENTED YET
 \
 &nbsp;
 * GET api/disciplina
@@ -73,10 +77,10 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * POST api/turma
 * PUT api/turma
 * DELETE api/turma/{id}
-* POST api/turma/aluno - NOT IMPLEMENTED YET
-* DELETE api/turma/aluno - NOT IMPLEMENTED YET
-* POST api/turma/coordenador - NOT IMPLEMENTED YET
-* DELETE api/turma/coordenador - NOT IMPLEMENTED YET
+* POST api/turma/professor/{id} - NOT IMPLEMENTED YET
+* DELETE api/turma/professor/{id} - NOT IMPLEMENTED YET
+* POST api/turma/coordenador/{id} - NOT IMPLEMENTED YET
+* DELETE api/turma/coordenador/{id} - NOT IMPLEMENTED YET
 \
 &nbsp;
 * GET api/disciplinaministrada

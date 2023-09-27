@@ -2,6 +2,7 @@
 using API.Data.ViewModels;
 using API.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace API.Data.Services
 {
@@ -31,6 +32,67 @@ namespace API.Data.Services
                             aulasTotais = curso.aulasTotais
                         }).FirstOrDefault()
                 }).ToList();
+
+            foreach (var r in response)
+            {
+                List<Models.CursoMatriculado> cursosMatriculados = this.context.CursoMatriculados
+                .Where(e => e.idTurma == r.id).ToList();
+
+                if (cursosMatriculados.Count > 0)
+                {
+                    r.alunos = new List<ViewModels.Aluno?>();
+                    foreach (var cm in cursosMatriculados)
+                    {
+                        r.alunos.Add(this.context.Alunos
+                        .Where(n => n.id == cm.idAluno)
+                        .Select(aluno => new ViewModels.Aluno()
+                        {
+                            id = aluno.id,
+                            nome = aluno.nome,
+                            cpf = aluno.cpf,
+                            rg = aluno.rg,
+                            telefone = aluno.telefone,
+                            email = aluno.email,
+                            cargo = aluno.cargo,
+                            cursos = this.context.CursoMatriculados
+                            .Where(n => n.idAluno == aluno.id)
+                            .Select(cursoMatriculado => new ViewModels.CursoMatriculado()
+                            {
+                                id = cursoMatriculado.id,
+                                semestreAtual = cursoMatriculado.semestreAtual,
+                                trancado = cursoMatriculado.trancado,
+                                finalizado = cursoMatriculado.finalizado,
+                                turma = this.context.Turmas
+                                .Where(n => n.id == cursoMatriculado.idTurma)
+                                .Select(turma => new ViewModels.Turma()
+                                {
+                                    id = turma.id,
+                                    nome = turma.nome,
+                                    curso = this.context.Cursos
+                                    .Where(n => n.id == turma.idCurso)
+                                    .Select(curso => new ViewModels.Curso()
+                                    {
+                                        id = curso.id,
+                                        nome = curso.nome,
+                                        cargaHoraria = curso.cargaHoraria,
+                                        aulasTotais = curso.aulasTotais
+                                    }).FirstOrDefault()
+                                }).FirstOrDefault(),
+                                curso = this.context.Cursos
+                                .Where(n => n.id == cursoMatriculado.idCurso)
+                                .Select(curso => new ViewModels.Curso()
+                                {
+                                    id = curso.id,
+                                    nome = curso.nome,
+                                    cargaHoraria = curso.cargaHoraria,
+                                    aulasTotais = curso.aulasTotais
+                                }).FirstOrDefault()
+                            }).ToList()
+                        }).FirstOrDefault());
+                    }
+                }
+            }
+
             return response;
         }
 
@@ -52,6 +114,63 @@ namespace API.Data.Services
                             aulasTotais = curso.aulasTotais
                         }).FirstOrDefault()
                 }).FirstOrDefault();
+
+            List<Models.CursoMatriculado>? cursosMatriculados = this.context.CursoMatriculados
+            .Where(e => e.idTurma == response.id).ToList();
+
+            if (cursosMatriculados.Count > 0)
+            {
+                response.alunos = new List<ViewModels.Aluno?>();
+                foreach (var cm in cursosMatriculados)
+                {
+                    response.alunos.Add(this.context.Alunos
+                    .Where(n => n.id == cm.idAluno)
+                    .Select(aluno => new ViewModels.Aluno()
+                    {
+                        id = aluno.id,
+                        nome = aluno.nome,
+                        cpf = aluno.cpf,
+                        rg = aluno.rg,
+                        telefone = aluno.telefone,
+                        email = aluno.email,
+                        cargo = aluno.cargo,
+                        cursos = this.context.CursoMatriculados
+                        .Where(n => n.idAluno == aluno.id)
+                        .Select(cursoMatriculado => new ViewModels.CursoMatriculado()
+                        {
+                            id = cursoMatriculado.id,
+                            semestreAtual = cursoMatriculado.semestreAtual,
+                            trancado = cursoMatriculado.trancado,
+                            finalizado = cursoMatriculado.finalizado,
+                            turma = this.context.Turmas
+                            .Where(n => n.id == cursoMatriculado.idTurma)
+                            .Select(turma => new ViewModels.Turma()
+                            {
+                                id = turma.id,
+                                nome = turma.nome,
+                                curso = this.context.Cursos
+                                .Where(n => n.id == turma.idCurso)
+                                .Select(curso => new ViewModels.Curso()
+                                {
+                                    id = curso.id,
+                                    nome = curso.nome,
+                                    cargaHoraria = curso.cargaHoraria,
+                                    aulasTotais = curso.aulasTotais
+                                }).FirstOrDefault()
+                            }).FirstOrDefault(),
+                            curso = this.context.Cursos
+                            .Where(n => n.id == cursoMatriculado.idCurso)
+                            .Select(curso => new ViewModels.Curso()
+                            {
+                                id = curso.id,
+                                nome = curso.nome,
+                                cargaHoraria = curso.cargaHoraria,
+                                aulasTotais = curso.aulasTotais
+                            }).FirstOrDefault()
+                        }).ToList()
+                    }).FirstOrDefault());
+                }
+            }
 
             return response;
         }
@@ -83,6 +202,11 @@ namespace API.Data.Services
         {
             this.context.Remove(turma);
             this.context.SaveChanges();
+        }
+
+        public void ServiceAddAluno(Models.Aluno aluno)
+        {
+
         }
     }
 }

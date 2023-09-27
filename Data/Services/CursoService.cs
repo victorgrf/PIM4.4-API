@@ -62,7 +62,7 @@ namespace API.Data.Services
             List<Models.Curso_Disciplina> cursos_disciplinas = this.context.Curso_Disciplinas
             .Where(e => e.idCurso == response.id).ToList();
 
-            if (cursos_disciplinas != null)
+            if (cursos_disciplinas.Count > 0)
             {
                 response.disciplinas = new List<ViewModels.Disciplina?>();
                 foreach (var cd in cursos_disciplinas)

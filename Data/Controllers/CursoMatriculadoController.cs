@@ -56,6 +56,29 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
+            var cursoMatriculados = this.dbContext.CursoMatriculados.Where(e => e.idTurma == cursoMatriculado.idTurma).ToList();
+            if (cursoMatriculados.Count >= 75)
+            {
+                return BadRequest("Limite de alunos nesta turma já atingido");
+            }
+
+            else
+            {
+                var jaNaTurma = false;
+                foreach (var cm in cursoMatriculados)
+                {
+                    if (cm.idAluno == cursoMatriculado.idAluno)
+                    {
+                        jaNaTurma = true;
+                    }
+                }
+
+                if (jaNaTurma)
+                {
+                    return BadRequest("Este aluno já faz parte desta turma");
+                }
+            }
+
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
                 var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
@@ -85,6 +108,29 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
+            var cursoMatriculados = this.dbContext.CursoMatriculados.Where(e => e.idTurma == cursoMatriculado.idTurma).ToList();
+            if (cursoMatriculados.Count >= 75)
+            {
+                return BadRequest("Limite de alunos nesta turma já atingido");
+            }
+
+            else
+            {
+                var jaNaTurma = false;
+                foreach (var cm in cursoMatriculados)
+                {
+                    if (cm.idAluno == cursoMatriculado.idAluno)
+                    {
+                        jaNaTurma = true;
+                    }
+                }
+
+                if (jaNaTurma)
+                {
+                    return BadRequest("Este aluno já faz parte desta turma");
+                }
+            }
+
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
                 var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
@@ -101,6 +147,18 @@ namespace API.Data.Controllers
         {
             var table = this.dbContext.CursoMatriculados.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
+
+            var disciplinaCursada = this.dbContext.DisciplinaCursadas.Where(e => e.idCursoMatriculado == id).ToList();
+            if (disciplinaCursada.Count > 0)
+            {
+                var errorObj = new RelatedTableError();
+                var ids = new List<int>();
+                foreach (var t in disciplinaCursada) ids.Add(t.id);
+                errorObj.AddTable("disciplinaCursada", ids);
+
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
             this.service.ServiceDelete(table);
             return Ok();
         }

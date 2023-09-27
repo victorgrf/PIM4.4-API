@@ -19,5 +19,6 @@ namespace API.Data.ViewModels
         public int id { get; set; }
         public string nome { get; set; }
         public ViewModels.Curso? curso { get; set; }
+        public List<ViewModels.Aluno?>? alunos { get; set; }
     }
 }
