@@ -13,6 +13,7 @@ namespace API.Data.Models
         public int idDisciplina { get ; set; } 
         public int idTurma { get ; set; }      
         public int idProfessor { get ; set; } 
+        public bool encerrada { get; set; }
         public bool coordenador { get ; set; }
     }
 }

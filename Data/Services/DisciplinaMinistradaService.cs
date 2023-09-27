@@ -55,6 +55,7 @@ namespace API.Data.Services
                             email = professor.email,
                             cargo = professor.cargo
                         }).FirstOrDefault(),
+                    encerrada = disciplinaMinistrada.encerrada,
                     coordenador = disciplinaMinistrada.coordenador
                 }).ToList();
             return response;
@@ -102,6 +103,7 @@ namespace API.Data.Services
                             email = professor.email,
                             cargo = professor.cargo
                         }).FirstOrDefault(),
+                    encerrada = disciplinaMinistrada.encerrada,
                     coordenador = disciplinaMinistrada.coordenador
                 }).FirstOrDefault();
 
@@ -116,6 +118,7 @@ namespace API.Data.Services
                 idDisciplina = disciplinaMinistrada.idDisciplina,
                 idTurma = disciplinaMinistrada.idTurma,
                 idProfessor = disciplinaMinistrada.idProfessor,
+                encerrada = disciplinaMinistrada.encerrada,
                 coordenador = disciplinaMinistrada.coordenador
             };
 
@@ -130,6 +133,7 @@ namespace API.Data.Services
             obj.idDisciplina = disciplinaMinistrada.idDisciplina;
             obj.idTurma = disciplinaMinistrada.idTurma;
             obj.idProfessor = disciplinaMinistrada.idProfessor;
+            obj.encerrada = disciplinaMinistrada.encerrada;
             obj.coordenador = disciplinaMinistrada.coordenador;
 
             this.context.SaveChanges();

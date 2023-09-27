@@ -43,7 +43,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.AnalistaRH)]
-        public IActionResult HttpPost(AnalistaRH_Input analistaRH)
+        public IActionResult HttpPost([FromForm] AnalistaRH_Input analistaRH)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).FirstOrDefault();
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).FirstOrDefault();
@@ -63,7 +63,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.AnalistaRH)]
-        public IActionResult HttpPut(int id, AnalistaRH_Input analistaRH)
+        public IActionResult HttpPut(int id, [FromForm] AnalistaRH_Input analistaRH)
         {
             var test_cpf = this.dbContext.Pessoas.Where(e => e.cpf == analistaRH.cpf).Where(e => e.id != id).FirstOrDefault();
             var test_rg = this.dbContext.Pessoas.Where(e => e.rg == analistaRH.rg).Where(e => e.id != id).FirstOrDefault();

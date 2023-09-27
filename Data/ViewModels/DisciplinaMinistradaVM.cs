@@ -6,16 +6,19 @@ namespace API.Data.ViewModels
     public class DisciplinaMinistrada_Input
     {
         [Required]
-        [Range(10000, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(10000, int.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
         public int idDisciplina { get; set; }
 
         [Required]
-        [Range(10000, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(10000, int.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
         public int idTurma { get; set; }
 
         [Required]
-        [Range(10000, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(10000, int.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
         public int idProfessor { get; set; }
+
+        [Required]
+        public bool encerrada { get; set; }
 
         [Required]
         public bool coordenador { get; set; }
@@ -27,6 +30,7 @@ namespace API.Data.ViewModels
         public ViewModels.Disciplina? disciplina { get; set; }
         public ViewModels.Turma? turma { get; set; }
         public ViewModels.Professor? professor { get; set; }
+        public bool encerrada { get; set; }
         public bool coordenador { get; set; }
     }
 }

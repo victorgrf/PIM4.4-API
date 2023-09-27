@@ -10,7 +10,7 @@ namespace API.Data.ViewModels
         public string nome { get; set; }
 
         [Required]
-        [Range(10000, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(10000, int.MaxValue, ErrorMessage = "O Valor de {0} deveria estar entre {1} e {2}.")]
         public int idCurso { get; set; }
     }
 

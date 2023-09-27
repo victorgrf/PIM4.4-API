@@ -3,8 +3,8 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 > version: .NET 6
 
 
-## Clonando a Solução
-### Instalar Pacotes NuGet:
+## Cloning the solution
+### Install NuGet packages:
 * Microsoft.EntityFrameworkCore
 * Microsoft.EntityFrameworkCore.Design
 * Microsoft.EntityFrameworkCore.Tools
@@ -14,7 +14,7 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 
 > Change Jwt secretKey, issuer and audience on appsettings.json!
 
-## Rotas
+## Routes
 * GET api/login - Importante salvar o "token", o "refreshToken" e o "id"
 * GET api/login/refresh
 * GET api/login/startup
@@ -61,3 +61,10 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * POST api/curso
 * PUT api/curso
 * DELETE api/curso/{id}
+\
+&nbsp;
+* GET api/disciplinaministrada
+* GET api/disciplinaministrada/{id}
+* POST api/disciplinaministrada
+* PUT api/disciplinaministrada
+* DELETE api/disciplinaministrada/{id}

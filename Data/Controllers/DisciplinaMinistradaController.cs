@@ -42,7 +42,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost(DisciplinaMinistrada_Input disciplinaMinistrada)
+        public IActionResult HttpPost([FromForm] DisciplinaMinistrada_Input disciplinaMinistrada)
         {
             var test_coordenador = this.dbContext.DisciplinaMinistradas
                 .Where(e => e.idTurma == disciplinaMinistrada.idTurma)
@@ -73,7 +73,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, DisciplinaMinistrada_Input disciplinaMinistrada)
+        public IActionResult HttpPut(int id, [FromForm] DisciplinaMinistrada_Input disciplinaMinistrada)
         {
             var test_coordenador = this.dbContext.DisciplinaMinistradas
                 .Where(e => e.idTurma == disciplinaMinistrada.idTurma)
@@ -109,6 +109,19 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario)]
         public IActionResult HttpDelete(int id)
         {
+            var conteudo = this.dbContext.Conteudos.Where(e => e.idDisciplinaMinistrada == id).ToList();
+            if (conteudo.Count > 0)
+            {
+                var errorObj = new RelatedTableError();
+
+                var ids = new List<int>();
+                foreach (var t in conteudo) ids.Add(t.id);
+                errorObj.AddTable("conteudo", ids);
+
+
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
             var table = this.dbContext.DisciplinaMinistradas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
             this.service.ServiceDelete(table);

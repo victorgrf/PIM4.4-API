@@ -44,7 +44,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost(Curso_Input curso)
+        public IActionResult HttpPost([FromForm] Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).FirstOrDefault();
             if (test_nome != null)
@@ -63,7 +63,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, Curso_Input curso)
+        public IActionResult HttpPut(int id, [FromForm] Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).Where(e => e.id != id).FirstOrDefault();
             if (test_nome != null && curso.nome == test_nome.nome)
