@@ -67,7 +67,7 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            pasta = Path.Combine(webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
+            pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
             novoNome = conteudo.documento.FileName.Replace(".pdf", DateTime.Now.ToString("(dddd, dd MMMM yyyy hh-mm-ss)"));
 
             caminho = Path.Combine(pasta, novoNome) + ".pdf";
@@ -108,7 +108,7 @@ namespace API.Data.Controllers
                     return StatusCode(errorObj.GetStatusCode(), errorObj);
                 }
 
-                pasta = Path.Combine(webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
+                pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
                 novoNome = conteudo.documento.FileName.Replace(".pdf", DateTime.Now.ToString("(dddd, dd MMMM yyyy hh-mm-ss)"));
 
                 caminho = Path.Combine(pasta, novoNome) + ".pdf";

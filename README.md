@@ -16,9 +16,12 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 
 ## Routes
 * GET api/login - Importante salvar o "token", o "refreshToken" e o "id"
-* GET api/login/refresh
-* GET api/login/startup
-* GET api/login/mudarsenha
+* POST api/login/refresh
+* POST api/login/startup
+* PUT api/login/mudarsenha
+\
+&nbsp;
+* GET api/file/conteudo
 \
 &nbsp;
 * GET api/analistarh
