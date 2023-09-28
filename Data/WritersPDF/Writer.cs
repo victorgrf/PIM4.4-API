@@ -18,6 +18,7 @@ namespace API.Data.WritersPDF
         protected Font fonteP1bold;
         protected Font fonteP2;
         protected Font fonteP2bold;
+        protected Font fonteFooter;
         protected Document pdf;
         protected DBContext dbContext;
         protected string? caminho;
@@ -34,12 +35,18 @@ namespace API.Data.WritersPDF
             this.fonteP1bold = new Font(this.fontePadrao, 14, Font.BOLD, BaseColor.Black);
             this.fonteP2 = new Font(this.fontePadrao, 10, Font.NORMAL, BaseColor.Black);
             this.fonteP2bold = new Font(this.fontePadrao, 10, Font.BOLD, BaseColor.Black);
+            this.fonteFooter = new Font(this.fontePadrao, 12, Font.NORMAL, BaseColor.Black);
             this.pdf = new Document(PageSize.A4,
                 15 * this.pixelPorMilimetro,
                 15 * this.pixelPorMilimetro,
                 15 * this.pixelPorMilimetro,
-                15 * this.pixelPorMilimetro);
+                20 * this.pixelPorMilimetro);
             this.dbContext = dbContext;
+        }
+
+        public Font GetFontFooter()
+        {
+            return this.fonteFooter;
         }
 
         public string? GetCaminho()
@@ -95,6 +102,69 @@ namespace API.Data.WritersPDF
             cell.PaddingBottom = 5;
             cell.BackgroundColor = cor;
             tabela.AddCell(cell);
+        }
+    }
+    public class Disciplina
+    {
+        public Models.Disciplina? disciplina { get; private set; }
+        public Models.DisciplinaCursada? disciplinaCursada { get; private set; }
+
+        public Disciplina(Models.Disciplina? disciplina, Models.DisciplinaCursada? disciplinaCursada)
+        {
+            this.disciplina = disciplina;
+            this.disciplinaCursada = disciplinaCursada;
+        }
+    }
+
+    public class Cursos
+    {
+        public Models.CursoMatriculado? cursoMatriculado { get; private set; }
+        public Models.Curso? curso { get; private set; }
+        public List<Disciplina>? disciplinas { get; private set; }
+
+        public Cursos(Models.CursoMatriculado? cursoMatriculado, Models.Curso? curso, List<Disciplina>? disciplinas)
+        {
+            this.cursoMatriculado = cursoMatriculado;
+            this.curso = curso;
+            this.disciplinas = disciplinas;
+        }
+    }
+
+    public class Eventos : PdfPageEventHelper
+    {
+        public Writer writer { get; private set; }
+
+        public Eventos(Writer writer)
+        {
+            this.writer = writer;
+        }
+
+        public override void OnOpenDocument(PdfWriter pdfWriter, Document documento)
+        {
+            base.OnOpenDocument(pdfWriter, documento);
+        }
+
+        public override void OnEndPage(PdfWriter pdfWriter, Document documento)
+        {
+            base.OnEndPage(pdfWriter, documento);
+
+            var momento = "Documento gerado em: " + DateTime.Now.ToShortDateString() + " às " + DateTime.Now.ToShortTimeString() + ".";
+            pdfWriter.DirectContent.BeginText();
+            pdfWriter.DirectContent.SetFontAndSize(this.writer.GetFontFooter().BaseFont, this.writer.GetFontFooter().Size);
+            pdfWriter.DirectContent.SetTextMatrix(documento.LeftMargin, documento.BottomMargin * 0.75f);
+            pdfWriter.DirectContent.ShowText(momento);
+            pdfWriter.DirectContent.EndText();
+
+            var pagAtual = pdfWriter.PageNumber;
+            var pag = "Página: " + pagAtual;
+
+            var largura = this.writer.GetFontFooter().BaseFont.GetWidthPoint(pag, this.writer.GetFontFooter().Size);
+            var pagTamanho = documento.PageSize;
+            pdfWriter.DirectContent.BeginText();
+            pdfWriter.DirectContent.SetFontAndSize(this.writer.GetFontFooter().BaseFont, this.writer.GetFontFooter().Size);
+            pdfWriter.DirectContent.SetTextMatrix(pagTamanho.Width - documento.RightMargin - largura, documento.BottomMargin * 0.75f);
+            pdfWriter.DirectContent.ShowText(pag);
+            pdfWriter.DirectContent.EndText();
         }
     }
 }

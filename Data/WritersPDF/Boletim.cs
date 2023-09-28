@@ -10,35 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Data.WritersPDF
 {
-    public class Disciplina
-    {
-        public Models.Disciplina? disciplina { get; private set; }
-        public Models.DisciplinaCursada? disciplinaCursada { get; private set; }
-
-        public Disciplina(Models.Disciplina? disciplina, Models.DisciplinaCursada? disciplinaCursada)
-        {
-            this.disciplina = disciplina;
-            this.disciplinaCursada = disciplinaCursada;
-        }
-    }
-
-    public class Cursos
-    {
-        public Models.CursoMatriculado? cursoMatriculado { get; private set; }
-        public Models.Curso? curso { get; private set; }
-        public List<Disciplina>? disciplinas { get; private set; }
-
-        public Cursos (Models.CursoMatriculado? cursoMatriculado, Models.Curso? curso, List<Disciplina>? disciplinas)
-        {
-            this.cursoMatriculado = cursoMatriculado;
-            this.curso = curso;
-            this.disciplinas = disciplinas;
-        }
-    }
-
     public class Boletim : WritersPDF.Writer
     {
-
         public Boletim(IWebHostEnvironment webHostEnvironment, DBContext dbContext) : base(webHostEnvironment, dbContext)
         {
             
@@ -75,13 +48,15 @@ namespace API.Data.WritersPDF
             FileStream arquivo;
             if (File.Exists(base.caminho))
                 arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
-
             else
                 arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
 
             // Preparando para escrever no arquivo
             var writer = PdfWriter.GetInstance(pdf, arquivo);
             base.pdf.Open();
+
+            // Adicionando o PageEvent para o Writer
+            writer.PageEvent = new Eventos(this);
 
             // Escrevendo o título
             var titulo = new Paragraph("Boletim - [Nome da Universidade]\n", base.fonteH1);

@@ -73,17 +73,17 @@ namespace API.Data.Controllers
             }
         }
 
-        [HttpGet("declaracao/{id}")]
+        [HttpGet("historico/{id}")]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetDeclaracao(int id)
+        public IActionResult GetHistorico(int id)
         {
             // AINDA PARA IMPLEMENTAR
             return Ok();
         }
 
-        [HttpGet("historico/{id}")]
+        [HttpGet("declaracao/{id}")]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetHistorico(int id)
+        public IActionResult GetDeclaracao(int id)
         {
             // AINDA PARA IMPLEMENTAR
             return Ok();
