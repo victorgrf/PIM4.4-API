@@ -4,6 +4,7 @@ using API.Data.Services;
 using API.Data.ViewModels;
 using API.Data.Errors;
 using API.Data.Identity;
+using API.Data.WritersPDF;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using API.Data.Models;
@@ -42,6 +43,58 @@ namespace API.Data.Controllers
             {
                 return NotFound("Arquivo não encontrado");
             }
+        }
+
+        [HttpGet("boletim/{id}")]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
+        public IActionResult GetBoletim(int id)
+        {
+            var aluno = this.dbContext.Alunos.Where(n => n.id == id).FirstOrDefault();
+            if (aluno == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                errorObj.AddId("aluno", id);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var boletim = new Boletim(this.webHostEnvironment, this.dbContext);
+            boletim.Gerar(id);
+
+            try
+            {
+                if (boletim.GetCaminho() == null) throw new System.IO.FileNotFoundException();
+                if (boletim.GetNome() == null) throw new System.IO.FileNotFoundException();
+                var stream = new FileStream(boletim.GetCaminho(), FileMode.Open);
+                return File(stream, "application/octet-stream", boletim.GetNome());
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                return NotFound("Arquivo não encontrado");
+            }
+        }
+
+        [HttpGet("declaracao/{id}")]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
+        public IActionResult GetDeclaracao(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
+
+        [HttpGet("historico/{id}")]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
+        public IActionResult GetHistorico(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
+        }
+
+        [HttpGet("relatorio/{id}")]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
+        public IActionResult GetRelatorio(int id)
+        {
+            // AINDA PARA IMPLEMENTAR
+            return Ok();
         }
     }
 }

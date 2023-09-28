@@ -4,6 +4,7 @@ using API.Data.Services;
 using API.Data.ViewModels;
 using API.Data.Errors;
 using API.Data.Identity;
+using API.Data.WritersPDF;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Data.Controllers
@@ -103,38 +104,6 @@ namespace API.Data.Controllers
             }
 
             this.service.ServiceDelete(table);
-            return Ok();
-        }
-
-        [HttpGet("boletim/{id}")]
-        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetBoletim(int id)
-        {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
-        }
-
-        [HttpGet("declaracao/{id}")]
-        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetDeclaracao(int id)
-        {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
-        }
-
-        [HttpGet("historico/{id}")]
-        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetHistorico(int id)
-        {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
-        }
-
-        [HttpGet("relatorio/{id}")]
-        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public IActionResult GetRelatorio(int id)
-        {
-            // AINDA PARA IMPLEMENTAR
             return Ok();
         }
     }
