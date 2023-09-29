@@ -16,6 +16,7 @@ namespace API.Data.WritersPDF
         protected Font fonteH2;
         protected Font fonteP1;
         protected Font fonteP1bold;
+        protected Font fonteP1italic;
         protected Font fonteP2;
         protected Font fonteP2bold;
         protected Font fonteFooter;
@@ -33,6 +34,7 @@ namespace API.Data.WritersPDF
             this.fonteH2 = new Font(this.fontePadrao, 18, Font.BOLD, BaseColor.Black);
             this.fonteP1 = new Font(this.fontePadrao, 14, Font.NORMAL, BaseColor.Black);
             this.fonteP1bold = new Font(this.fontePadrao, 14, Font.BOLD, BaseColor.Black);
+            this.fonteP1italic = new Font(this.fontePadrao, 14, Font.ITALIC, BaseColor.Black);
             this.fonteP2 = new Font(this.fontePadrao, 10, Font.NORMAL, BaseColor.Black);
             this.fonteP2bold = new Font(this.fontePadrao, 10, Font.BOLD, BaseColor.Black);
             this.fonteFooter = new Font(this.fontePadrao, 12, Font.NORMAL, BaseColor.Black);
@@ -57,6 +59,11 @@ namespace API.Data.WritersPDF
         public string? GetNome()
         {
             return this.nome;
+        }
+
+        public void MudarMargins(float marginLeft, float marginRight, float marginTop, float marginBottom)
+        {
+            this.pdf.SetMargins(marginLeft, marginRight, marginTop, marginBottom);
         }
 
         protected string TraduzirBool(bool x)

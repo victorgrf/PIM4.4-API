@@ -105,8 +105,28 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public IActionResult GetDeclaracao(int id)
         {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
+            var aluno = this.dbContext.Alunos.Where(n => n.id == id).FirstOrDefault();
+            if (aluno == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                errorObj.AddId("aluno", id);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var declaracao = new Declaracao(this.webHostEnvironment, this.dbContext);
+            declaracao.Gerar(id);
+
+            try
+            {
+                if (declaracao.GetCaminho() == null) throw new System.IO.FileNotFoundException();
+                if (declaracao.GetNome() == null) throw new System.IO.FileNotFoundException();
+                var stream = new FileStream(declaracao.GetCaminho(), FileMode.Open);
+                return File(stream, "application/octet-stream", declaracao.GetNome());
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                return NotFound("Arquivo não encontrado");
+            }
         }
 
         [HttpGet("relatorio/{id}")]

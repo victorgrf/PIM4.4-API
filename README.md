@@ -51,8 +51,8 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * POST api/aluno
 * PUT api/aluno
 * DELETE api/aluno/{id}
-* GET api/aluno/boletim/{id} - NOT IMPLEMENTED YET
-* GET api/aluno/declaracao/{id} - NOT IMPLEMENTED YET
+* GET api/aluno/boletim/{id}
+* GET api/aluno/declaracao/{id}
 * GET api/aluno/historico/{id} - NOT IMPLEMENTED YET
 * GET api/aluno/relatorio/{id} - NOT IMPLEMENTED YET
 \
