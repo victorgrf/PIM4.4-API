@@ -11,6 +11,20 @@ namespace API.Data.ViewModels
         public int id { get; set; }
     }
 
+    public class MudarSenha
+    {
+        [Required]
+        public int id { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string senhaAntiga { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string senhaNova { get; set; }
+    }
+
     public class Refresh
     {
         [Required] 

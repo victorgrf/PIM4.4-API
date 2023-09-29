@@ -112,7 +112,8 @@ namespace API.Data.Services
         {
             var obj = new Models.Professor()
             {
-                senha = professor.senha,
+                senha = Criptografia.CriptografarSenha(professor.cpf.ToString()),
+                senhaAlterada = false,
                 nome = professor.nome,
                 cpf = professor.cpf,
                 rg = professor.rg,
@@ -129,7 +130,6 @@ namespace API.Data.Services
         {
             var obj = this.context.Professores.FirstOrDefault(n => n.id == id);
 
-            obj.senha = professor.senha;
             obj.nome = professor.nome;
             obj.cpf = professor.cpf;
             obj.rg = professor.rg;

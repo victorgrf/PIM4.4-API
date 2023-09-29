@@ -52,7 +52,8 @@ namespace API.Data.Services
         {
             var obj = new Models.Secretario()
             {
-                senha = secretario.senha,
+                senha = Criptografia.CriptografarSenha(secretario.cpf.ToString()),
+                senhaAlterada = false,
                 nome = secretario.nome,
                 cpf = secretario.cpf,
                 rg = secretario.rg,
@@ -69,7 +70,6 @@ namespace API.Data.Services
         {
             var obj = this.context.Secretarios.FirstOrDefault(n => n.id == id);
 
-            obj.senha = secretario.senha;
             obj.nome = secretario.nome;
             obj.cpf = secretario.cpf;
             obj.rg = secretario.rg;

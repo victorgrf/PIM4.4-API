@@ -6,10 +6,6 @@ namespace API.Data.ViewModels
     public class Aluno_Input
     {
         [Required] 
-        [MaxLength(20)] 
-        public string senha { get; set; }
-
-        [Required] 
         [MaxLength(255)] 
         public string nome { get; set; }
 

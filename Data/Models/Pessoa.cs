@@ -8,6 +8,7 @@ namespace API.Data.Models
     {
         [Key] public int id { get; set; }
         public string senha { get; set; }
+        public bool senhaAlterada { get; set; }
         public string nome { get; set; }
         public long cpf { get; set; }
         public long rg { get; set; }

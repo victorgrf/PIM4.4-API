@@ -33,12 +33,22 @@ namespace API.Data.Controllers
             var pessoa = this.authenticate.GetPessoa(login.id);
             if (pessoa == null)
             {
-                return BadRequest("id incorreto");
+                return Unauthorized("id incorreto");
+            }
+
+            if (this.authenticate.PrimeiroLogin(login.id, login.senha))
+            {
+                return StatusCode(StatusCodes.Status426UpgradeRequired, new
+                {
+                    title = "Primeiro Login.",
+                    description = "Para efetuar o primeiro login em uma conta, é necessário alterar a senha inicial que é gerada automáticamente pelo sistema por uma de preferência do usuário. Para efetuar essa ação, utilize a rota api/login/mudarsenha.",
+                    status = StatusCodes.Status426UpgradeRequired
+                });
             }
 
             if (this.authenticate.AutenticarPessoa(login.id, login.senha) == false)
             {
-                return BadRequest("senha incorreta.");
+                return Unauthorized("senha incorreta.");
             }
 
             var token = this.authenticate.GerarToken(pessoa);
@@ -93,11 +103,28 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("mudarsenha")]
-        [Authorize]
-        public ActionResult<dynamic> MudarSenha()
+        public ActionResult<dynamic> MudarSenha([FromForm] ViewModels.MudarSenha mudarSenha)
         {
-            // AINDA PARA IMPLEMENTAR
-            return Unauthorized();
+            if (mudarSenha.senhaNova == mudarSenha.senhaAntiga)
+            {
+                return BadRequest("A nova senha não pode ser igual a anterior");
+            }
+
+            var pessoa = this.authenticate.GetPessoa(mudarSenha.id);
+            if (pessoa == null)
+            {
+                return Unauthorized("id incorreto");
+            }
+
+            if (this.authenticate.AutenticarPessoa(mudarSenha.id, mudarSenha.senhaAntiga) == false)
+            {
+                return Unauthorized("senha incorreta.");
+            }
+
+            pessoa.senha = Criptografia.CriptografarSenha(mudarSenha.senhaNova);
+            this.dbContext.SaveChanges();
+
+            return Ok();
         }
     }
 }

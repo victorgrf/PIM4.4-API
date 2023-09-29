@@ -52,7 +52,8 @@ namespace API.Data.Services
         {
             var obj = new Models.AnalistaRH()
             {
-                senha = analistaRH.senha,
+                senha = Criptografia.CriptografarSenha(analistaRH.cpf.ToString()),
+                senhaAlterada = false,
                 nome = analistaRH.nome,
                 cpf = analistaRH.cpf,
                 rg = analistaRH.rg,
@@ -69,7 +70,6 @@ namespace API.Data.Services
         {
             var obj = this.context.AnalistasRH.FirstOrDefault(n => n.id == id);
 
-            obj.senha = analistaRH.senha;
             obj.nome = analistaRH.nome;
             obj.cpf = analistaRH.cpf;
             obj.rg = analistaRH.rg;

@@ -20,10 +20,21 @@ namespace API.Data.Identity
             this.configuration = configuration;
         }
 
+        public bool PrimeiroLogin(int id, string senha)
+        {
+            var pessoa = this.GetPessoa(id);
+            if (pessoa != null && pessoa.cpf.ToString() == senha)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool AutenticarPessoa(int id, string senha)
         {
             var pessoa = this.GetPessoa(id);
-            if (pessoa == null || pessoa.senha != senha)
+            var hash = Criptografia.CriptografarSenha(senha);
+            if (pessoa == null || pessoa.senha != hash)
             {
                 return false;
             }
@@ -55,7 +66,7 @@ namespace API.Data.Identity
                 SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
                 Subject = claimsIdentity,
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddHours(3),
+                Expires = DateTime.UtcNow.AddHours(1),
                 IssuedAt = DateTime.UtcNow,
                 TokenType = "at+jwt"
             });
