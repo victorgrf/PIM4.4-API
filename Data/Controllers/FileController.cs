@@ -77,8 +77,28 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public IActionResult GetHistorico(int id)
         {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
+            var aluno = this.dbContext.Alunos.Where(n => n.id == id).FirstOrDefault();
+            if (aluno == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                errorObj.AddId("aluno", id);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var historicoEscolar = new HistoricoEscolar(this.webHostEnvironment, this.dbContext);
+            historicoEscolar.Gerar(id);
+            
+            try
+            {
+                if (historicoEscolar.GetCaminho() == null) throw new System.IO.FileNotFoundException();
+                if (historicoEscolar.GetNome() == null) throw new System.IO.FileNotFoundException();
+                var stream = new FileStream(historicoEscolar.GetCaminho(), FileMode.Open);
+                return File(stream, "application/octet-stream", historicoEscolar.GetNome());
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                return NotFound("Arquivo não encontrado");
+            }
         }
 
         [HttpGet("declaracao/{id}")]

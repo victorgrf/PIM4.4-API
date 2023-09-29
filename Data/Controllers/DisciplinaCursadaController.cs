@@ -54,11 +54,17 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            //if (disciplinaCursada.idDisciplina != cursoMatriculado.disci)
-            //{
-            //    var errorObj = new NotRelatedError(disciplinaCursada.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
-            //    return StatusCode(errorObj.GetStatusCode(), errorObj);
-            //}
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == cursoMatriculado.idCurso);
+            var curso_discplinas = this.dbContext.Curso_Disciplinas
+            .Where(n => n.idCurso == cursoMatriculado.idCurso)
+            .Where(n => n.idDisciplina == disciplinaCursada.idDisciplina).FirstOrDefault();
+            var relacaoExiste = false;
+            if (curso_discplinas != null) relacaoExiste = true;
+            if (!relacaoExiste)
+            {
+                var errorObj = new NotRelatedError(disciplinaCursada.idDisciplina, cursoMatriculado.idCurso, "Disciplina não faz parte do curso.");
+               return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
 
             this.service.ServicePost(disciplinaCursada);
             return Ok();
@@ -81,11 +87,17 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            //if (disciplinaCursada.idDisciplina != cursoMatriculado.disci)
-            //{
-            //    var errorObj = new NotRelatedError(disciplinaCursada.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
-            //    return StatusCode(errorObj.GetStatusCode(), errorObj);
-            //}
+            var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == cursoMatriculado.idCurso);
+            var curso_discplinas = this.dbContext.Curso_Disciplinas
+            .Where(n => n.idCurso == cursoMatriculado.idCurso)
+            .Where(n => n.idDisciplina == disciplinaCursada.idDisciplina).FirstOrDefault();
+            var relacaoExiste = false;
+            if (curso_discplinas != null) relacaoExiste = true;
+            if (!relacaoExiste)
+            {
+                var errorObj = new NotRelatedError(disciplinaCursada.idDisciplina, cursoMatriculado.idCurso, "Disciplina não faz parte do curso.");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
 
             this.service.ServicePut(id, disciplinaCursada);
             return Ok();

@@ -12,7 +12,6 @@ namespace API.Data.WritersPDF
 {
     public class HistoricoEscolar : WritersPDF.Writer
     {
-
         public HistoricoEscolar(IWebHostEnvironment webHostEnvironment, DBContext dbContext) : base(webHostEnvironment, dbContext)
         {
 
@@ -41,21 +40,24 @@ namespace API.Data.WritersPDF
                 }
 
             // Definindo o caminho do arquivo
-            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Boletims\\");
-            base.nome = "boletim " + aluno.nome + " (ID-" + idAluno + ").pdf";
+            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Historicos\\");
+            base.nome = "histórico escolar " + aluno.nome + " (ID-" + idAluno + ").pdf";
             base.caminho = Path.Combine(pasta, base.nome);
 
             // Criando ou abrindo o arquivo
             FileStream arquivo;
             if (File.Exists(base.caminho))
-                arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
-
-            else
-                arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
+                File.Delete(base.caminho);
+                //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
+            //else
+            arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
 
             // Preparando para escrever no arquivo
             var writer = PdfWriter.GetInstance(pdf, arquivo);
             base.pdf.Open();
+
+            // Adicionando o PageEvent para o Writer
+            writer.PageEvent = new Eventos(this);
 
             // Escrevendo o título
             var titulo = new Paragraph("Histórico Escolar - [Nome da Universidade]\n", base.fonteH1);
@@ -81,13 +83,24 @@ namespace API.Data.WritersPDF
             alunoP2.Font = base.fonteP1;
             alunoP2.Add(new Phrase(aluno.rg.ToString()));
 
+            var alunoP3 = new Paragraph("", base.fonteP1bold);
+            alunoP3.Add(new Phrase("E-mail: "));
+            alunoP3.Font = base.fonteP1;
+            alunoP3.Add(new Phrase(aluno.email));
+            alunoP3.Font = base.fonteP1bold;
+            alunoP3.Add(new Phrase(" Telefone: "));
+            alunoP3.Font = base.fonteP1;
+            alunoP3.Add(new Phrase(aluno.telefone.ToString()));
+
             alunoP1.Alignment = Element.ALIGN_LEFT;
             alunoP2.Alignment = Element.ALIGN_LEFT;
+            alunoP3.Alignment = Element.ALIGN_LEFT;
             base.pdf.Add(alunoP1);
             base.pdf.Add(alunoP2);
+            base.pdf.Add(alunoP3);
 
             // Adicionando a área de cursos
-            var cursosP = new Paragraph("\nTodos os cursos do aluno cursados na faculdade", base.fonteH2);
+            var cursosP = new Paragraph("\nTodos os cursos do aluno na universidade", base.fonteH2);
             cursosP.Alignment = Element.ALIGN_LEFT;
             base.pdf.Add(cursosP);
 
@@ -123,10 +136,21 @@ namespace API.Data.WritersPDF
                 cursoT2.Add(new Phrase(base.TraduzirBool(curso.cursoMatriculado.finalizado)));
                 cursoT2.Font = base.fonteP1bold;
 
+                var cursoT3 = new Paragraph("", base.fonteP1bold);
+                cursoT3.Add(new Phrase("Carga Horaria Total: "));
+                cursoT3.Font = base.fonteP1;
+                cursoT3.Add(new Phrase(base.TraduzirInt(curso.curso.cargaHoraria)));
+                cursoT3.Font = base.fonteP1bold;
+                cursoT3.Add(new Phrase(" Número total de aulas: "));
+                cursoT3.Font = base.fonteP1;
+                cursoT3.Add(new Phrase(base.TraduzirInt(curso.curso.aulasTotais)));
+
                 cursoT1.Alignment = Element.ALIGN_LEFT;
                 cursoT2.Alignment = Element.ALIGN_LEFT;
+                cursoT3.Alignment = Element.ALIGN_LEFT;
                 base.pdf.Add(cursoT1);
                 base.pdf.Add(cursoT2);
+                base.pdf.Add(cursoT3);
 
                 // Adicionando linha em branco (espaçamento)
                 base.pdf.Add(new Paragraph(" ", base.fonteP1));
@@ -166,6 +190,7 @@ namespace API.Data.WritersPDF
                 // Adicionando linha em branco (espaçamento)
                 base.pdf.Add(new Paragraph(" ", base.fonteP1));
             }
+
 
             // Fechando o arquivo
             pdf.Close();

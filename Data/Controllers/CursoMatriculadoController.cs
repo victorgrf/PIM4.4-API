@@ -6,6 +6,7 @@ using API.Data.Errors;
 using Microsoft.AspNetCore.Authorization;
 using API.Data.Identity;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace API.Data.Controllers
 {
@@ -15,11 +16,13 @@ namespace API.Data.Controllers
     {
         private readonly DBContext dbContext;
         private readonly CursoMatriculadoService service;
+        private readonly DisciplinaCursadaService disciplinaCursadaService;
 
-        public CursoMatriculadoController(DBContext context, CursoMatriculadoService service)
+        public CursoMatriculadoController(DBContext context, CursoMatriculadoService service, DisciplinaCursadaService disciplinaCursadaService)
         {
             this.dbContext = context;
             this.service = service;
+            this.disciplinaCursadaService = disciplinaCursadaService;
         }
 
         [HttpGet]
@@ -81,11 +84,31 @@ namespace API.Data.Controllers
 
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
-                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
+                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "Turma não faz este curso");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             this.service.ServicePost(cursoMatriculado);
+
+            var cursoMatriculadoCadastrado = this.dbContext.CursoMatriculados
+            .Where(n => n.idAluno == cursoMatriculado.idAluno)
+            .Where(n => n.idCurso == cursoMatriculado.idCurso)
+            .Where(n => n.idTurma == cursoMatriculado.idTurma).FirstOrDefault();
+
+            var curso_disciplinas = this.dbContext.Curso_Disciplinas.Where(n => n.idCurso == cursoMatriculado.idCurso).ToList();
+            foreach (var c_d in curso_disciplinas)
+            {
+                var c_dVM = new ViewModels.DisciplinaCursada_Input
+                {
+                    idDisciplina = c_d.idDisciplina,
+                    idCursoMatriculado = cursoMatriculadoCadastrado.id,
+                    faltas = null,
+                    prova1 = null,
+                    prova2 = null,
+                    trabalho = null
+                };
+                this.disciplinaCursadaService.ServicePost(c_dVM);
+            }
             return Ok();
         }
 
@@ -136,8 +159,34 @@ namespace API.Data.Controllers
 
             if (turma.idCurso != cursoMatriculado.idCurso)
             {
-                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "idCurso : cursoMatriculado.idCurso");
+                var errorObj = new NotRelatedError(cursoMatriculado.idCurso, turma.idCurso, "Turma não faz este curso");
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            // AQUI
+
+            var disciplinaCursadas = this.dbContext.DisciplinaCursadas.Where(e => e.idCursoMatriculado == id).ToList();
+            foreach (var dc in disciplinaCursadas)
+            {
+                this.disciplinaCursadaService.ServiceDelete(dc);
+            }
+
+            if (table.idCurso != cursoMatriculado.idCurso)
+            {
+                var curso_disciplinas = this.dbContext.Curso_Disciplinas.Where(n => n.idCurso == cursoMatriculado.idCurso).ToList();
+                foreach (var c_d in curso_disciplinas)
+                {
+                    var c_dVM = new ViewModels.DisciplinaCursada_Input
+                    {
+                        idDisciplina = c_d.idDisciplina,
+                        idCursoMatriculado = table.id,
+                        faltas = null,
+                        prova1 = null,
+                        prova2 = null,
+                        trabalho = null
+                    };
+                    this.disciplinaCursadaService.ServicePost(c_dVM);
+                }
             }
 
             this.service.ServicePut(id, cursoMatriculado);
@@ -151,15 +200,20 @@ namespace API.Data.Controllers
             var table = this.dbContext.CursoMatriculados.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
-            var disciplinaCursada = this.dbContext.DisciplinaCursadas.Where(e => e.idCursoMatriculado == id).ToList();
-            if (disciplinaCursada.Count > 0)
-            {
-                var errorObj = new RelatedTableError();
-                var ids = new List<int>();
-                foreach (var t in disciplinaCursada) ids.Add(t.id);
-                errorObj.AddTable("disciplinaCursada", ids);
+            var disciplinaCursadas = this.dbContext.DisciplinaCursadas.Where(e => e.idCursoMatriculado == id).ToList();
+            //if (disciplinaCursadas.Count > 0)
+            //{
+            //    var errorObj = new RelatedTableError();
+            //    var ids = new List<int>();
+            //    foreach (var t in disciplinaCursadas) ids.Add(t.id);
+            //    errorObj.AddTable("disciplinaCursada", ids);
 
-                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            //    return StatusCode(errorObj.GetStatusCode(), errorObj);
+            //}
+
+            foreach (var dc in disciplinaCursadas)
+            {
+                this.disciplinaCursadaService.ServiceDelete(dc);
             }
 
             this.service.ServiceDelete(table);

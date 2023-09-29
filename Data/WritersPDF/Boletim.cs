@@ -47,9 +47,10 @@ namespace API.Data.WritersPDF
             // Criando ou abrindo o arquivo
             FileStream arquivo;
             if (File.Exists(base.caminho))
-                arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
-            else
-                arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
+                File.Delete(base.caminho);
+            //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
+            //else
+            arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
 
             // Preparando para escrever no arquivo
             var writer = PdfWriter.GetInstance(pdf, arquivo);

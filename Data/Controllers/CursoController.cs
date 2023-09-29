@@ -159,7 +159,11 @@ namespace API.Data.Controllers
             var exists = this.dbContext.Curso_Disciplinas
             .Where(e => e.idCurso == curso_disciplina.idCurso)
             .FirstOrDefault(e => e.idDisciplina == curso_disciplina.idDisciplina);
-            if (exists == null) return NotFound("Nenhuma tabela deste tipo de entidade e com estes ids foi encontrada no banco de dados");
+            if (exists == null)
+            {
+                var errorObj = new NotRelatedError(curso_disciplina.idDisciplina, curso_disciplina.idCurso, "Disciplina não faz parte do curso");
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
 
             this.service.ServiceRemoveDisciplina(exists);
             return Ok();

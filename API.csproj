@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="DataBase\Files\Conteudos\" />
     <Folder Include="DataBase\Files\Boletims\" />
+    <Folder Include="DataBase\Files\Historicos\" />
     <Folder Include="DataBase\SQL\" />
   </ItemGroup>
 
