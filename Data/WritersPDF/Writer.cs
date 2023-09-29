@@ -92,6 +92,24 @@ namespace API.Data.WritersPDF
             return x.ToString();
         }
 
+        protected string TraduzirZero(float x)
+        {
+            if (x == 0f)
+            {
+                return "--";
+            }
+            return x.ToString();
+        }
+
+        protected float TraduzirNull(float? x)
+        {
+            if (x == null)
+            {
+                return 0f;
+            }
+            return (float)x;
+        }
+
         protected void CriarCelula(PdfPTable tabela, string nome, int align)
         {
             var cor = new BaseColor(0.95f, 0.95f, 0.95f);

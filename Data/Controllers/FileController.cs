@@ -133,8 +133,28 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public IActionResult GetRelatorio(int id)
         {
-            // AINDA PARA IMPLEMENTAR
-            return Ok();
+            var aluno = this.dbContext.Alunos.Where(n => n.id == id).FirstOrDefault();
+            if (aluno == null)
+            {
+                var errorObj = new InvalidIdReferenceError();
+                errorObj.AddId("aluno", id);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
+            }
+
+            var relatorio = new RelatorioDeMatricula(this.webHostEnvironment, this.dbContext);
+            relatorio.Gerar(id);
+
+            try
+            {
+                if (relatorio.GetCaminho() == null) throw new System.IO.FileNotFoundException();
+                if (relatorio.GetNome() == null) throw new System.IO.FileNotFoundException();
+                var stream = new FileStream(relatorio.GetCaminho(), FileMode.Open);
+                return File(stream, "application/octet-stream", relatorio.GetNome());
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                return NotFound("Arquivo não encontrado");
+            }
         }
     }
 }
