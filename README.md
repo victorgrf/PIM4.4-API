@@ -1,6 +1,4 @@
-﻿> ---------------------------------------------------------------------------
-
-# PIM4.4 API
+﻿# PIM4.4 API
 Uma API RestFull para conectar todos os sistemas relacionados ao PIM4.4. Feito usando ASP.NET Core.
 > versão: .NET Core 6
 
