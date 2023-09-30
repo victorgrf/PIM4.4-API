@@ -122,6 +122,7 @@ namespace API.Data.Controllers
             }
 
             pessoa.senha = Criptografia.CriptografarSenha(mudarSenha.senhaNova);
+            pessoa.senhaAlterada = true;
             this.dbContext.SaveChanges();
 
             return Ok();

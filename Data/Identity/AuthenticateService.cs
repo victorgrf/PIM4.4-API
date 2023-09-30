@@ -23,7 +23,7 @@ namespace API.Data.Identity
         public bool PrimeiroLogin(int id, string senha)
         {
             var pessoa = this.GetPessoa(id);
-            if (pessoa != null && pessoa.cpf.ToString() == senha)
+            if (pessoa != null && pessoa.senhaAlterada == false)
             {
                 return true;
             }
