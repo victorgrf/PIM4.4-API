@@ -1,12 +1,12 @@
 ﻿> ---------------------------------------------------------------------------
 
 # PIM4.4 API
-A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
-> version: .NET 6
+Uma API RestFull para conectar todos os sistemas relacionados ao PIM4.4. Feito usando ASP.NET Core.
+> versão: .NET Core 6
 
 
-## Cloning the solution
-### Install NuGet packages:
+## Clonando a solução
+### Instale os seguintes pacotes NuGet:
 * Microsoft.EntityFrameworkCore
 * Microsoft.EntityFrameworkCore.Design
 * Microsoft.EntityFrameworkCore.Tools
@@ -15,92 +15,13 @@ A RestFull API to connect all PIM4.4 related systems. Made using ASP.NET Core.
 * Microsoft.AspNetCore.Authentication.JwtBearer (versão 6.0.*)
 * iTextSharp.LGPLv2.Core
 
-> Change Jwt secretKey, issuer and audience on appsettings.json!
+> Mude o JWT secretKey, issuer e audience em appsettings.json!
 
-## Routes
-* GET api/login - Importante salvar o "token", o "refreshToken" e o "id"
-* POST api/login/refresh
-* POST api/login/startup
-* PUT api/login/mudarsenha - NOT IMPLEMENTED YET
-\
-&nbsp;
-* GET api/file/conteudo
-\
-&nbsp;
-* GET api/analistarh
-* GET api/analistarh/{id}
-* POST api/analistarh
-* PUT api/analistarh
-* DELETE api/analistarh/{id}
-\
-&nbsp;
-* GET api/secretario
-* GET api/secretario/{id}
-* POST api/secretario
-* PUT api/secretario
-* DELETE api/secretario/{id}
-\
-&nbsp;
-* GET api/professor
-* GET api/professor/{id}
-* POST api/professor
-* PUT api/professor
-* DELETE api/professor/{id}
-\
-&nbsp;
-* GET api/aluno
-* GET api/aluno/{id}
-* POST api/aluno
-* PUT api/aluno
-* DELETE api/aluno/{id}
-* GET api/aluno/boletim/{id}
-* GET api/aluno/declaracao/{id}
-* GET api/aluno/historico/{id}
-* GET api/aluno/relatorio/{id}
-\
-&nbsp;
-* GET api/disciplina
-* GET api/disciplina/{id}
-* POST api/disciplina
-* PUT api/disciplina
-* DELETE api/disciplina/{id}
-\
-&nbsp;
-* GET api/curso
-* GET api/curso/{id}
-* POST api/curso
-* PUT api/curso
-* DELETE api/curso/{id}
-* POST api/curso/disciplina
-* DELETE api/curso/disciplina
-\
-&nbsp;
-* GET api/turma
-* GET api/turma/{id}
-* POST api/turma
-* PUT api/turma
-* DELETE api/turma/{id}
-\
-&nbsp;
-* GET api/disciplinaministrada
-* GET api/disciplinaministrada/{id}
-* POST api/disciplinaministrada
-* PUT api/disciplinaministrada
-* DELETE api/disciplinaministrada/{id}
-\
-&nbsp;
-* GET api/cursomatriculado
-* GET api/cursomatriculado/{id}
-* POST api/cursomatriculado
-* PUT api/cursomatriculado
-* DELETE api/cursomatriculado/{id}
-\
-&nbsp;
-* GET api/disciplinacursada
-* GET api/disciplinacursada/{id}
-* POST api/disciplinacursada
-* PUT api/disciplinacursada
-* DELETE api/disciplinacursada/{id}
-* PUT api/disciplinacursada/media/{id}
-* PUT api/disciplinacursada/frequencia/{id}
-* PUT api/disciplinacursada/situacao/{id}
+## Integrando a API
+> A API usa o sistema de autorização e autenticação com tokens JWT (Json Web Token), e também faz uso de um sistema de refresh token.
+1. Caso o banco de dados esteja limpo, é necessário acessar a rota "api/login/startup" para criar a primeira conta (do tipo AnalistaRH).
+2. Caso contrário, utilize uma conta do tipo AnalistaRH ou Secretario para criar outra conta de nível infeior.
+3. Toda conta é criada com uma senha automática (CPF), por isso é necessário alterar a senha inicial antes de fazer o primeiro login. Utilize a rota "api/login/mudarsenha".
+4. Após alterar a senha, faça o login pela rota "api/login" para obter o seu token e o refresh_token e salve-os em cookies ou semelhantes.
+5. Atente para o tempo de expiração do token de acesso, que é de 1 hora.
+6. Quando seu token expirar, para manter-se logado sem a necessidade de  enviar suas credenciais novamente, utilize a rota "api/login/refresh" para obter um novo token.
