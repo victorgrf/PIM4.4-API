@@ -66,7 +66,7 @@ namespace API.Data.Identity
                 SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
                 Subject = claimsIdentity,
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddSeconds(0),
+                Expires = DateTime.UtcNow.AddHours(1),
                 IssuedAt = DateTime.UtcNow,
                 TokenType = "at+jwt"
             });
