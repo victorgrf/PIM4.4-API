@@ -66,7 +66,7 @@ namespace API.Data.Controllers
 
         [HttpPost("refresh")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Refresh([FromForm] Refresh refresh)
+        public async Task<ActionResult<dynamic>> Refresh( Refresh refresh)
         {
             var pessoa = this.authenticate.GetPessoa(refresh.id);
             var valido = this.authenticate.ValidarRefreshToken(refresh.refreshToken, refresh.id);
@@ -90,7 +90,7 @@ namespace API.Data.Controllers
 
         [HttpPost("startup")]
         [AllowAnonymous]
-        public ActionResult<dynamic> Startup([FromForm] ViewModels.AnalistaRH_Input analistaRH)
+        public ActionResult<dynamic> Startup( ViewModels.AnalistaRH_Input analistaRH)
         {
             var test = this.dbContext.Pessoas.FirstOrDefault();
             if (test != null)
@@ -103,7 +103,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("mudarsenha")]
-        public ActionResult<dynamic> MudarSenha([FromForm] ViewModels.MudarSenha mudarSenha)
+        public ActionResult<dynamic> MudarSenha( ViewModels.MudarSenha mudarSenha)
         {
             if (mudarSenha.senhaNova == mudarSenha.senhaAntiga)
             {

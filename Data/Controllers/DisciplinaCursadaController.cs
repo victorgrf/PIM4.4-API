@@ -42,7 +42,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost([FromForm] DisciplinaCursada_Input disciplinaCursada)
+        public IActionResult HttpPost( DisciplinaCursada_Input disciplinaCursada)
         {
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == disciplinaCursada.idDisciplina);
             var cursoMatriculado = this.dbContext.CursoMatriculados.FirstOrDefault(e => e.id == disciplinaCursada.idCursoMatriculado);
@@ -72,7 +72,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, [FromForm] DisciplinaCursada_Input disciplinaCursada)
+        public IActionResult HttpPut(int id,  DisciplinaCursada_Input disciplinaCursada)
         {
             var table = this.dbContext.DisciplinaCursadas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");

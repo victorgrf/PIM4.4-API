@@ -44,7 +44,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost([FromForm] Turma_Input turma)
+        public IActionResult HttpPost( Turma_Input turma)
         {
             var test_nome = this.dbContext.Turmas.Where(e => e.nome == turma.nome).FirstOrDefault();
             if (test_nome != null)
@@ -71,7 +71,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, [FromForm] Turma_Input turma)
+        public IActionResult HttpPut(int id,  Turma_Input turma)
         {
             var test_nome = this.dbContext.Turmas.Where(e => e.nome == turma.nome).Where(e => e.id != id).FirstOrDefault();
             if (test_nome != null)

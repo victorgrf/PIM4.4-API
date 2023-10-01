@@ -44,7 +44,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost([FromForm] Curso_Input curso)
+        public IActionResult HttpPost(Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).FirstOrDefault();
             if (test_nome != null)
@@ -63,7 +63,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, [FromForm] Curso_Input curso)
+        public IActionResult HttpPut(int id, Curso_Input curso)
         {
             var test_nome = this.dbContext.Cursos.Where(e => e.nome == curso.nome).Where(e => e.id != id).FirstOrDefault();
             if (test_nome != null && curso.nome == test_nome.nome)
@@ -116,7 +116,7 @@ namespace API.Data.Controllers
 
         [HttpPost("disciplina")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult AddDisciplina([FromForm] Curso_Disciplina_Input curso_disciplina)
+        public IActionResult AddDisciplina(Curso_Disciplina_Input curso_disciplina)
         {
             var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == curso_disciplina.idCurso);
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == curso_disciplina.idDisciplina);
@@ -144,7 +144,7 @@ namespace API.Data.Controllers
 
         [HttpDelete("disciplina")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult RemoveDisciplina([FromForm] Curso_Disciplina_Input curso_disciplina)
+        public IActionResult RemoveDisciplina(Curso_Disciplina_Input curso_disciplina)
         {
             var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == curso_disciplina.idCurso);
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == curso_disciplina.idDisciplina);
