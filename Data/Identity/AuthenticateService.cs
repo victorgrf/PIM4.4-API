@@ -66,7 +66,7 @@ namespace API.Data.Identity
                 SigningCredentials = new SigningCredentials(chaveSeguranca, SecurityAlgorithms.HmacSha256),
                 Subject = claimsIdentity,
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddSeconds(0),
                 IssuedAt = DateTime.UtcNow,
                 TokenType = "at+jwt"
             });
@@ -94,19 +94,34 @@ namespace API.Data.Identity
             return handler.WriteToken(refreshToken);
         }
 
-        public bool ValidarRefreshToken(string refreshToken, int id)
+        public bool ValidarRefreshToken(string token, string refreshToken, int id)
         {
             var chaveSeguranca = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["Jwt:secretKey"]));
             var handler = new JwtSecurityTokenHandler();
+            var parameters = new TokenValidationParameters
+            {
+                ValidIssuer = this.configuration["Jwt:issuer"],
+                ValidAudience = this.configuration["Jwt:audience"],
+                ValidateLifetime = true,
+                IssuerSigningKey = chaveSeguranca
+            };
             try
             {
-                handler.ValidateToken(refreshToken, new TokenValidationParameters
-                {
-                    ValidIssuer = this.configuration["Jwt:issuer"],
-                    ValidAudience = this.configuration["Jwt:audience"],
-                    IssuerSigningKey = chaveSeguranca,
-                }, out SecurityToken tokenValidado);
-
+                handler.ValidateToken(token, parameters, out SecurityToken tokenValidado);
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                Console.WriteLine("token expirado");
+            }
+            catch
+            {
+                Console.WriteLine("token inválido");
+                return false;
+            }
+            
+            try
+            {
+                handler.ValidateToken(refreshToken, parameters, out SecurityToken refreashTokenValidado);
                 return true;
             }
             catch

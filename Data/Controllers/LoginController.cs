@@ -69,11 +69,11 @@ namespace API.Data.Controllers
         public async Task<ActionResult<dynamic>> Refresh( Refresh refresh)
         {
             var pessoa = this.authenticate.GetPessoa(refresh.id);
-            var valido = this.authenticate.ValidarRefreshToken(refresh.refreshToken, refresh.id);
+            var valido = this.authenticate.ValidarRefreshToken(refresh.token, refresh.refreshToken, refresh.id);
 
             if (!valido)
             {
-                BadRequest("Refresh token inválido ou expirado. Tente logar novamente \"api/login\".");
+                return BadRequest("Refresh token ou token inválido ou expirado. Tente logar novamente api/login.");
             }
 
             var newToken = this.authenticate.GerarToken(pessoa);
@@ -105,11 +105,6 @@ namespace API.Data.Controllers
         [HttpPut("mudarsenha")]
         public ActionResult<dynamic> MudarSenha( ViewModels.MudarSenha mudarSenha)
         {
-            if (mudarSenha.senhaNova == mudarSenha.senhaAntiga)
-            {
-                return BadRequest("A nova senha não pode ser igual a anterior");
-            }
-
             var pessoa = this.authenticate.GetPessoa(mudarSenha.id);
             if (pessoa == null)
             {
@@ -119,6 +114,11 @@ namespace API.Data.Controllers
             if (this.authenticate.AutenticarPessoa(mudarSenha.id, mudarSenha.senhaAntiga) == false)
             {
                 return Unauthorized("senha incorreta.");
+            }
+
+            if (mudarSenha.senhaNova == mudarSenha.senhaAntiga)
+            {
+                return BadRequest("A nova senha não pode ser igual a anterior");
             }
 
             pessoa.senha = Criptografia.CriptografarSenha(mudarSenha.senhaNova);
