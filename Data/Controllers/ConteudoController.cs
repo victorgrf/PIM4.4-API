@@ -1,4 +1,4 @@
-﻿using API.DataBase;
+using API.DataBase;
 using Microsoft.AspNetCore.Mvc;
 using API.Data.Services;
 using API.Data.ViewModels;
@@ -45,13 +45,13 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost([FromForm] IFormFile documento, [FromBody] int idDisciplinaMinistrada)
+        public IActionResult HttpPost([FromForm] Conteudo_Input_Post conteudo)
         {
-            var conteudo = new ViewModels.Conteudo_Input_Post()
-            {
-                documento = documento,
-                idDisciplinaMinistrada = idDisciplinaMinistrada
-            };
+            //var conteudo = new ViewModels.Conteudo_Input_Post()
+            //{
+            //    documento = documento,
+            //    idDisciplinaMinistrada = idDisciplinaMinistrada
+            //};
             var disciplinaMinistrada = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == conteudo.idDisciplinaMinistrada);
             if (disciplinaMinistrada == null)
             {
@@ -86,14 +86,14 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id, int idDisciplinaMinistrada, [FromForm] IFormFile documento)
+        public IActionResult HttpPut(int id, [FromForm] Conteudo_Input_Put conteudo)
         {
-            var conteudo = new ViewModels.Conteudo_Input_Put()
-            {
-                documento = documento,
-                idDisciplinaMinistrada = idDisciplinaMinistrada,
-            };
-            
+            //var conteudo = new ViewModels.Conteudo_Input_Put()
+            //{
+            //    documento = documento,
+            //    idDisciplinaMinistrada = idDisciplinaMinistrada,
+            //};
+
             var table = this.dbContext.Conteudos.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
 
