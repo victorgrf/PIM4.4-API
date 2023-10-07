@@ -13,10 +13,10 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.DisciplinaCursada> ServiceGetAll()
+        public List<ViewModels.DisciplinaCursada> ServiceGetAll(int? idCursoMatriculado)
         {
             var response = this.context.DisciplinaCursadas
-            .Where(n => n.id != 0)
+            .Where(idCursoMatriculado != null ? n => n.idCursoMatriculado == idCursoMatriculado : n => n.id != 0)
             .Select(disciplinaCursada => new ViewModels.DisciplinaCursada()
             {
                 id = disciplinaCursada.id,
@@ -200,7 +200,7 @@ namespace API.Data.Services
             var media = ((obj.prova1 * 4) + (obj.prova2 * 4) + (obj.trabalho * 2)) / 10;
             obj.media = media;
             this.context.SaveChanges();
-            return (float) obj.media;
+            return (float)obj.media;
         }
 
         public float ServiceFrequencia(int id)
@@ -208,17 +208,17 @@ namespace API.Data.Services
             var obj = this.context.DisciplinaCursadas.FirstOrDefault(n => n.id == id);
             var cm = this.context.CursoMatriculados.FirstOrDefault(n => n.id == obj.idCursoMatriculado);
             var curso = this.context.Cursos.FirstOrDefault(n => n.id == cm.idCurso);
-            var frequencia = 100 - (((float) obj.faltas / (float)curso.aulasTotais) * 100f);
-            obj.frequencia = (int) frequencia;
+            var frequencia = 100 - (((float)obj.faltas / (float)curso.aulasTotais) * 100f);
+            obj.frequencia = (int)frequencia;
             this.context.SaveChanges();
-            return (int) obj.frequencia;
+            return (int)obj.frequencia;
         }
 
         public string ServiceSituacao(int id)
         {
             var obj = this.context.DisciplinaCursadas.FirstOrDefault(n => n.id == id);
             var situacao = string.Empty;
-            
+
             if (obj.frequencia == null || obj.media == null)
             {
                 situacao = Situacao.Cursando;

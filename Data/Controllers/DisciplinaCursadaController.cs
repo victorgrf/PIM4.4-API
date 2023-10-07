@@ -24,9 +24,9 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<List<DisciplinaCursada>> HttpGetAll()
+        public ActionResult<List<DisciplinaCursada>> HttpGetAll(int? idCursoMatriculado)
         {
-            var response = this.service.ServiceGetAll();
+            var response = this.service.ServiceGetAll(idCursoMatriculado);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -42,7 +42,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost( DisciplinaCursada_Input disciplinaCursada)
+        public IActionResult HttpPost(DisciplinaCursada_Input disciplinaCursada)
         {
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == disciplinaCursada.idDisciplina);
             var cursoMatriculado = this.dbContext.CursoMatriculados.FirstOrDefault(e => e.id == disciplinaCursada.idCursoMatriculado);
@@ -63,7 +63,7 @@ namespace API.Data.Controllers
             if (!relacaoExiste)
             {
                 var errorObj = new NotRelatedError(disciplinaCursada.idDisciplina, cursoMatriculado.idCurso, "Disciplina não faz parte do curso.");
-               return StatusCode(errorObj.GetStatusCode(), errorObj);
+                return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
             this.service.ServicePost(disciplinaCursada);
@@ -72,7 +72,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id,  DisciplinaCursada_Input disciplinaCursada)
+        public IActionResult HttpPut(int id, DisciplinaCursada_Input disciplinaCursada)
         {
             var table = this.dbContext.DisciplinaCursadas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");

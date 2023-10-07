@@ -24,9 +24,9 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<List<DisciplinaMinistrada>> HttpGetAll()
+        public ActionResult<List<DisciplinaMinistrada>> HttpGetAll(int? idProfessor)
         {
-            var response = this.service.ServiceGetAll();
+            var response = this.service.ServiceGetAll(idProfessor);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -42,7 +42,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost( DisciplinaMinistrada_Input disciplinaMinistrada)
+        public IActionResult HttpPost(DisciplinaMinistrada_Input disciplinaMinistrada)
         {
             var disciplina = this.dbContext.Disciplinas.FirstOrDefault(e => e.id == disciplinaMinistrada.idDisciplina);
             var turma = this.dbContext.Turmas.FirstOrDefault(e => e.id == disciplinaMinistrada.idTurma);
@@ -57,7 +57,7 @@ namespace API.Data.Controllers
             }
 
             var disciplinaMinistradas = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == disciplinaMinistrada.idTurma).ToList();
-            if  (disciplinaMinistradas.Count > 0)
+            if (disciplinaMinistradas.Count > 0)
             {
                 var jaNaTurma = false;
                 var temCoordenador = false;
@@ -91,7 +91,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id,  DisciplinaMinistrada_Input disciplinaMinistrada)
+        public IActionResult HttpPut(int id, DisciplinaMinistrada_Input disciplinaMinistrada)
         {
             var table = this.dbContext.DisciplinaMinistradas.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
@@ -130,7 +130,7 @@ namespace API.Data.Controllers
             }
 
             if (table.idProfessor != disciplinaMinistrada.idProfessor)
-            { 
+            {
                 var disciplinaMinistradas = this.dbContext.DisciplinaMinistradas.Where(e => e.idTurma == disciplinaMinistrada.idTurma).ToList();
                 if (disciplinaMinistradas.Count > 0)
                 {
