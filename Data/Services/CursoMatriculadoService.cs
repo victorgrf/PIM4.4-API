@@ -13,10 +13,10 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.CursoMatriculado> ServiceGetAll()
+        public List<ViewModels.CursoMatriculado> ServiceGetAll(int? idAluno)
         {
             var response = this.context.CursoMatriculados
-            .Where(n => n.id != 0)
+            .Where(idAluno != null ? n => n.idAluno == idAluno : n => n.id != 0)
             .Select(cursoMatriculado => new ViewModels.CursoMatriculado()
             {
                 id = cursoMatriculado.id,

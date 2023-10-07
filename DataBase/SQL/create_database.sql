@@ -140,11 +140,11 @@ CREATE TABLE IF NOT EXISTS db_a9f943_pim.disciplina_professor_turma (
 CREATE TABLE IF NOT EXISTS db_a9f943_pim.curso_disciplina (
 	id                     INT NOT NULL UNIQUE AUTO_INCREMENT,
     idCurso                INT NOT NULL,
-    idDisciplinaMinistrada INT NOT NULL,
+    idDisciplina INT NOT NULL,
     
-    CONSTRAINT PK_cd       PRIMARY KEY(id),
-    CONSTRAINT FK_cd_curso FOREIGN KEY(idCurso) REFERENCES db_a9f943_pim.curso(id),
-    CONSTRAINT FK_cd_dm    FOREIGN KEY(idDisciplinaMinistrada) REFERENCES db_a9f943_pim.disciplinaMinistrada(id)
+    CONSTRAINT PK_cd            PRIMARY KEY(id),
+    CONSTRAINT FK_cd_curso      FOREIGN KEY(idCurso) REFERENCES db_a9f943_pim.curso(id),
+    CONSTRAINT FK_cd_disciplina FOREIGN KEY(idDisciplina) REFERENCES db_a9f943_pim.disciplina(id)
 ) AUTO_INCREMENT = 10001;
 
 # 1 aluno : n cursoMatriculado

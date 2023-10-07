@@ -27,9 +27,9 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<List<CursoMatriculado>> HttpGetAll()
+        public ActionResult<List<CursoMatriculado>> HttpGetAll(int? idAluno)
         {
-            var response = this.service.ServiceGetAll();
+            var response = this.service.ServiceGetAll(idAluno);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -45,7 +45,7 @@ namespace API.Data.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPost( CursoMatriculado_Input cursoMatriculado)
+        public IActionResult HttpPost(CursoMatriculado_Input cursoMatriculado)
         {
             var curso = this.dbContext.Cursos.FirstOrDefault(e => e.id == cursoMatriculado.idCurso);
             var turma = this.dbContext.Turmas.FirstOrDefault(e => e.id == cursoMatriculado.idTurma);
@@ -102,7 +102,7 @@ namespace API.Data.Controllers
                 {
                     idDisciplina = c_d.idDisciplina,
                     idCursoMatriculado = cursoMatriculadoCadastrado.id,
-                    faltas = null,
+                    faltas = 0,
                     prova1 = null,
                     prova2 = null,
                     trabalho = null
@@ -114,7 +114,7 @@ namespace API.Data.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = Roles.Secretario)]
-        public IActionResult HttpPut(int id,  CursoMatriculado_Input cursoMatriculado)
+        public IActionResult HttpPut(int id, CursoMatriculado_Input cursoMatriculado)
         {
             var table = this.dbContext.CursoMatriculados.Where(e => e.id == id).FirstOrDefault();
             if (table == null) return NotFound("Nenhuma tabela deste tipo de entidade e com este id foi encontrada no banco de dados");
