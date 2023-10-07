@@ -27,9 +27,9 @@ namespace API.Data.Controllers
 
         [HttpGet]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
-        public ActionResult<List<Conteudo>> HttpGetAll()
+        public ActionResult<List<Conteudo>> HttpGetAll(int? idDisciplinaMinistrada)
         {
-            var response = this.service.ServiceGetAll();
+            var response = this.service.ServiceGetAll(idDisciplinaMinistrada);
             if (response == null) return NotFound("Nenhum resultado obtido");
             return response;
         }
@@ -72,7 +72,7 @@ namespace API.Data.Controllers
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
-            pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
+            pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase/Files/Conteudos");
             novoNome = conteudo.documento.FileName.Replace(".pdf", DateTime.Now.ToString("(dddd, dd MMMM yyyy hh-mm-ss)"));
 
             caminho = Path.Combine(pasta, novoNome) + ".pdf";

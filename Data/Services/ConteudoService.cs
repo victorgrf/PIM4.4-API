@@ -15,10 +15,10 @@ namespace API.Data.Services
             this.context = context;
         }
 
-        public List<ViewModels.Conteudo> ServiceGetAll()
+        public List<ViewModels.Conteudo> ServiceGetAll(int? idDisciplinaMinistrada)
         {
             var response = this.context.Conteudos
-            .Where(n => n.id != 0)
+            .Where(idDisciplinaMinistrada != null ? n => n.idDisciplinaMinistrada == idDisciplinaMinistrada : n => n.id != 0)
             .Select(conteudo => new ViewModels.Conteudo()
             {
                 id = conteudo.id,
@@ -144,13 +144,13 @@ namespace API.Data.Services
             var obj = this.context.Conteudos.FirstOrDefault(n => n.id == id);
 
             obj.idDisciplinaMinistrada = conteudo.idDisciplinaMinistrada;
-            
+
             if (documentoURL != null)
             {
                 var pasta = Path.Combine(webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
                 var caminho = Path.Combine(pasta, obj.documentoURL.Remove(0, 19));
                 if (File.Exists(caminho)) File.Delete(caminho);
-                obj.documentoURL =  documentoURL;
+                obj.documentoURL = documentoURL;
             }
 
             this.context.SaveChanges();
