@@ -14,7 +14,7 @@ namespace API.Data.WritersPDF
     {
         public Boletim(IWebHostEnvironment webHostEnvironment, DBContext dbContext) : base(webHostEnvironment, dbContext)
         {
-            
+
         }
 
         // Função para gerar o boletim em pdf
@@ -24,7 +24,7 @@ namespace API.Data.WritersPDF
             var aluno = base.dbContext.Alunos.FirstOrDefault(n => n.id == idAluno);
             var cursoMatriculados = base.dbContext.CursoMatriculados.Where(n => n.idAluno == idAluno).ToList();
             var cursos = new List<Cursos>();
-            if (cursoMatriculados.Count > 0) 
+            if (cursoMatriculados.Count > 0)
                 foreach (var cm in cursoMatriculados)
                 {
                     var curso = base.dbContext.Cursos.FirstOrDefault(n => n.id == cm.idCurso);
@@ -40,7 +40,7 @@ namespace API.Data.WritersPDF
                 }
 
             // Definindo o caminho do arquivo
-            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Boletims\\");
+            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase/Files/Boletims");
             base.nome = "boletim " + aluno.nome + " (ID-" + idAluno + ").pdf";
             base.caminho = Path.Combine(pasta, base.nome);
 
@@ -137,10 +137,10 @@ namespace API.Data.WritersPDF
 
                     // Adicionando a tabela de disciplinas
                     var tabelaDisciplinas = new PdfPTable(7); // 10
-                    tabelaDisciplinas.SetTotalWidth(new float[] {2.35f, 0.5f, 0.75f, 0.6f, 0.6f, 0.6f, 0.6f });
+                    tabelaDisciplinas.SetTotalWidth(new float[] { 2.35f, 0.5f, 0.75f, 0.6f, 0.6f, 0.6f, 0.6f });
                     tabelaDisciplinas.DefaultCell.BorderWidth = 1;
                     tabelaDisciplinas.WidthPercentage = 100;
-                    
+
                     // Adicionando a primeira célula
                     base.CriarCelula(tabelaDisciplinas, "Nome", Element.ALIGN_LEFT);
                     base.CriarCelula(tabelaDisciplinas, "Faltas", Element.ALIGN_MIDDLE);

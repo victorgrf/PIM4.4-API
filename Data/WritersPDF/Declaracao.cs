@@ -32,7 +32,7 @@ namespace API.Data.WritersPDF
                 }
 
             // Definindo o caminho do arquivo
-            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Declaracoes\\");
+            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase/Files/Declaracoes");
             base.nome = "declaração escolar " + aluno.nome + " (ID-" + idAluno + ").pdf";
             base.caminho = Path.Combine(pasta, base.nome);
 

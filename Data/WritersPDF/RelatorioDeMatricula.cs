@@ -41,7 +41,7 @@ namespace API.Data.WritersPDF
                 }
 
             // Definindo o caminho do arquivo
-            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Relatorios\\");
+            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase/Files/Relatorios");
             base.nome = "relatório de matrícula " + aluno.nome + " (ID-" + idAluno + ").pdf";
             base.caminho = Path.Combine(pasta, base.nome);
 
@@ -49,7 +49,7 @@ namespace API.Data.WritersPDF
             FileStream arquivo;
             if (File.Exists(base.caminho))
                 File.Delete(base.caminho);
-                //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
+            //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
             //else
             arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
 
@@ -69,7 +69,7 @@ namespace API.Data.WritersPDF
             var alunoInfos = new Paragraph("\n\nInformações pessoais do Aluno", base.fonteH2);
             alunoInfos.Alignment = Element.ALIGN_LEFT;
             base.pdf.Add(alunoInfos);
-            
+
             var infos = new Paragraph("\nNome: ", base.fonteP1bold);
             infos.Font = base.fonteP1;
             infos.Add(new Phrase(aluno.nome));
@@ -148,9 +148,9 @@ namespace API.Data.WritersPDF
                                 ++countFrequenciaMediaTotal;
 
                                 // Juntando info para as estatísticas gerais
-                                if (menorFrequencia == null || disciplina.disciplinaCursada.frequencia < menorFrequencia) 
+                                if (menorFrequencia == null || disciplina.disciplinaCursada.frequencia < menorFrequencia)
                                     menorFrequencia = disciplina.disciplinaCursada.frequencia;
-                                if (maiorFrequencia == null || disciplina.disciplinaCursada.frequencia > maiorFrequencia) 
+                                if (maiorFrequencia == null || disciplina.disciplinaCursada.frequencia > maiorFrequencia)
                                     maiorFrequencia = disciplina.disciplinaCursada.frequencia;
                             }
 

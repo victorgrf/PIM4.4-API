@@ -32,7 +32,7 @@ namespace API.Data.Controllers
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public ActionResult<dynamic> Conteudo(string file)
         {
-            string pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Conteudos\\");
+            string pasta = Path.Combine(this.webHostEnvironment.ContentRootPath, "DataBase/Files/Conteudos");
             string caminho = Path.Combine(pasta, file);
             try
             {
@@ -87,7 +87,7 @@ namespace API.Data.Controllers
 
             var historicoEscolar = new HistoricoEscolar(this.webHostEnvironment, this.dbContext);
             historicoEscolar.Gerar(id);
-            
+
             try
             {
                 if (historicoEscolar.GetCaminho() == null) throw new System.IO.FileNotFoundException();

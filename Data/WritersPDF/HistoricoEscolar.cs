@@ -40,7 +40,7 @@ namespace API.Data.WritersPDF
                 }
 
             // Definindo o caminho do arquivo
-            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase\\Files\\Historicos\\");
+            var pasta = Path.Combine(base.webHostEnvironment.ContentRootPath, "DataBase/Files/Historicos");
             base.nome = "histórico escolar " + aluno.nome + " (ID-" + idAluno + ").pdf";
             base.caminho = Path.Combine(pasta, base.nome);
 
@@ -48,7 +48,7 @@ namespace API.Data.WritersPDF
             FileStream arquivo;
             if (File.Exists(base.caminho))
                 File.Delete(base.caminho);
-                //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
+            //arquivo = new FileStream(base.caminho, FileMode.Open, FileAccess.Write);
             //else
             arquivo = new FileStream(base.caminho, FileMode.Create, FileAccess.Write);
 

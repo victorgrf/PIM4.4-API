@@ -44,7 +44,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Roles.Secretario)]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor)]
         public IActionResult HttpPost([FromForm] Conteudo_Input_Post conteudo)
         {
             //var conteudo = new ViewModels.Conteudo_Input_Post()
@@ -85,7 +85,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.Secretario)]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor)]
         public IActionResult HttpPut(int id, [FromForm] Conteudo_Input_Put conteudo)
         {
             //var conteudo = new ViewModels.Conteudo_Input_Put()
@@ -133,7 +133,7 @@ namespace API.Data.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Secretario)]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor)]
         public IActionResult HttpDelete(int id)
         {
             var table = this.dbContext.Conteudos.Where(e => e.id == id).FirstOrDefault();
