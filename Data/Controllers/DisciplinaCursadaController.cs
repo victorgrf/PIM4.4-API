@@ -71,7 +71,7 @@ namespace API.Data.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.Secretario)]
+        [Authorize(Roles = Roles.Secretario + "," + Roles.Professor)]
         public IActionResult HttpPut(int id, DisciplinaCursada_Input disciplinaCursada)
         {
             var table = this.dbContext.DisciplinaCursadas.Where(e => e.id == id).FirstOrDefault();
