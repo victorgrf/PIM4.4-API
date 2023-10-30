@@ -76,7 +76,7 @@ namespace API.Data.Controllers
             novoNome = conteudo.documento.FileName.Replace(".pdf", DateTime.Now.ToString("(dddd, dd MMMM yyyy hh-mm-ss)"));
 
             caminho = Path.Combine(pasta, novoNome) + ".pdf";
-            url = "/api/file/certificado/" + novoNome + ".pdf";
+            url = "/api/file/conteudo/" + novoNome + ".pdf";
 
             using (var stream = new FileStream(caminho, FileMode.Create)) conteudo.documento.CopyTo(stream);
 

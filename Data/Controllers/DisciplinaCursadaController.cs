@@ -121,7 +121,7 @@ namespace API.Data.Controllers
             if (disciplinaCursada == null)
             {
                 var errorObj = new InvalidIdReferenceError();
-                errorObj.AddId("disciplinaCursada", disciplinaCursada.idCursoMatriculado);
+                errorObj.AddId("disciplinaCursada", id);
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
@@ -151,7 +151,7 @@ namespace API.Data.Controllers
             if (disciplinaCursada == null)
             {
                 var errorObj = new InvalidIdReferenceError();
-                errorObj.AddId("disciplinaCursada", disciplinaCursada.idCursoMatriculado);
+                errorObj.AddId("disciplinaCursada", id);
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 
@@ -171,7 +171,7 @@ namespace API.Data.Controllers
             });
         }
 
-        [HttpPut("situacao{id}")]
+        [HttpPut("situacao/{id}")]
         [Authorize(Roles = Roles.Secretario + "," + Roles.Professor + "," + Roles.Aluno)]
         public IActionResult CalcularSituacao(int id)
         {
@@ -179,7 +179,7 @@ namespace API.Data.Controllers
             if (disciplinaCursada == null)
             {
                 var errorObj = new InvalidIdReferenceError();
-                errorObj.AddId("disciplinaCursada", disciplinaCursada.idCursoMatriculado);
+                errorObj.AddId("disciplinaCursada", id);
                 return StatusCode(errorObj.GetStatusCode(), errorObj);
             }
 

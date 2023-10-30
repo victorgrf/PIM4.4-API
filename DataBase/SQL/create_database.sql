@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS db_a9f943_pim.disciplinaCursada (
     trabalho           DOUBLE,
     media              DOUBLE,
     faltas             INT    NOT NULL DEFAULT 0,
-    frequencia         DOUBLE,
+    frequencia         INT,
     situacao           VARCHAR(10) NOT NULL DEFAULT "Cursando", # ("Cursando", "Aprovado", "Reprovado")   ,
 	
     CONSTRAINT PK_dc            PRIMARY KEY(id),
